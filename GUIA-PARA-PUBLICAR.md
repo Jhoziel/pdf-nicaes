@@ -37,7 +37,7 @@ Anota estas respuestas en un lugar privado:
 
 Haz estos pasos en tu computadora Windows, usando una cuenta normal.
 
-1. Abre [el repositorio en GitHub](https://github.com/CamiloHerreraDR/pdf-nicaes). Si no puedes verlo, pide acceso al dueño del repositorio.
+1. Abre [el repositorio en GitHub](https://github.com/Jhoziel/pdf-nicaes/). Si no puedes verlo, pide acceso al dueño del repositorio.
 2. Usa la versión que te indiquen para publicar. Para descargar la rama principal, selecciona `main`, luego **Code → Download ZIP**.
 3. En Descargas, haz clic derecho sobre el ZIP y elige **Extraer todo**. Entra en la carpeta extraída hasta ver `README.md`, `index.html` y la carpeta `deploy`.
 4. Haz clic en la barra de dirección del Explorador de archivos, escribe `powershell` y presiona Enter. Se abrirá una ventana para escribir comandos dentro de esa carpeta.
