@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Separa planos PDF por TRUSS y combina documentos." data-i18n-content="metaDescription" />
+    <title data-i18n="documentTitle">PDF Nicaes - separar y combinar</title>
+    <link rel="stylesheet" href="styles.css?v=20260831-1" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div class="brand-group">
+          <a class="brand" href="." aria-label="PDF Nicaes, inicio" data-i18n-aria-label="brandHome">
+            <img class="brand-logo" src="assets/nicaes-logo-white.png" alt="" width="520" height="200" />
+            <span class="brand-product">PDF Toolkit</span>
+          </a>
+          <span class="app-version-badge" id="app-version" aria-live="polite"></span>
+        </div>
+        <div class="topbar-actions">
+          <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false">
+            <span class="theme-toggle-label" data-i18n="themeLabel">Tema</span>
+            <span class="theme-toggle-track" aria-hidden="true">
+              <span data-i18n="themeLight">Claro</span>
+              <span data-i18n="themeDark">Oscuro</span>
+              <span class="theme-toggle-thumb"></span>
+            </span>
+          </button>
+          <div class="language-switch" role="group" aria-label="Idioma" data-i18n-aria-label="languageSelectorLabel">
+            <button class="language-option is-active" id="language-es" type="button" data-language="es" aria-pressed="true" aria-label="Usar español" data-i18n-aria-label="languageSpanishLabel"><span aria-hidden="true">ES</span></button>
+            <button class="language-option" id="language-en" type="button" data-language="en" aria-pressed="false" aria-label="Usar inglés" data-i18n-aria-label="languageEnglishLabel"><span aria-hidden="true">EN</span></button>
+          </div>
+          <details class="privacy-note">
+            <summary data-i18n="privacySummary">Procesamiento local</summary>
+            <p data-i18n="privacyBody">Tus documentos permanecen en este navegador. Solo ante un incidente se envían metadatos técnicos sanitizados; nunca PDFs, nombres, códigos TRUSS ni contenido.</p>
+          </details>
+        </div>
+      </header>
+
+      <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+      <section class="hero" aria-labelledby="page-title">
+        <div class="eyebrow" data-i18n="heroEyebrow">Herramienta técnica de planos</div>
+        <h1 id="page-title" data-i18n="heroTitle">Separa y actualiza planos PDF.</h1>
+        <p data-i18n="heroBody">Detecta el código bajo “TRUSS”, organiza versiones y descarga resultados listos para trabajar.</p>
+      </section>
+
+      <nav class="workflow-steps" aria-label="Progreso del trabajo" data-i18n-aria-label="workflowLabel">
+        <ol>
+          <li id="step-files" data-state="current" aria-current="step"><span>1</span><strong data-i18n="stepFiles">Archivos</strong></li>
+          <li id="step-operation" data-state="pending"><span>2</span><strong data-i18n="stepOperation">Operación</strong></li>
+          <li id="step-results" data-state="pending"><span>3</span><strong data-i18n="stepResults">Resultados</strong></li>
+        </ol>
+      </nav>
+
+      <section class="workspace" id="workspace" aria-label="Procesamiento de archivos PDF" data-i18n-aria-label="workspaceLabel" aria-busy="false">
+        <section class="upload-card" aria-labelledby="files-title">
+          <div class="dropzone" id="dropzone">
+            <div class="dropzone-copy">
+              <span class="upload-symbol" aria-hidden="true">PDF</span>
+              <div>
+                <h2 id="files-title" data-i18n="uploadTitle">Añade tus planos PDF</h2>
+                <p data-i18n="uploadBody">Arrástralos aquí o selecciónalos desde tu equipo.</p>
+              </div>
+            </div>
+            <div class="dropzone-actions">
+              <button class="secondary-button pick-files-button" id="pick-files" type="button" data-i18n="selectPdfs">Seleccionar PDFs o ZIP</button>
+              <button class="text-button example-button" id="load-example" type="button" data-i18n="loadExample">Cargar ejemplo de prueba</button>
+            </div>
+            <input id="file-input" type="file" accept="application/pdf,.pdf,application/zip,.zip" multiple hidden tabindex="-1" />
+          </div>
+
+          <div class="file-panel" id="file-panel" hidden>
+            <div class="section-heading file-heading">
+              <div>
+                <span class="section-kicker" data-i18n="loadedFiles">Archivos cargados</span>
+                <h2 id="file-count">0 PDFs</h2>
+              </div>
+              <div class="heading-actions">
+                <button class="secondary-button" id="add-more-files" type="button" data-i18n="addPdfs">Añadir PDFs</button>
+                <button class="text-button danger-text" id="clear-files" type="button" data-i18n="removeAll">Quitar todos</button>
+              </div>
+            </div>
+            <p class="queue-help" id="queue-help" data-i18n="queueHelp">El orden define la prioridad al combinar: la versión más reciente debe quedar al final.</p>
+            <ul class="file-list" id="file-list" aria-describedby="queue-help"></ul>
+            <div class="load-more-row" id="file-list-more-row" hidden><button class="secondary-button" id="show-more-files" type="button" data-i18n="showMoreFiles">Mostrar 100 PDFs más</button></div>
+          </div>
+
+          <div class="pcl-upload-section" id="pcl-upload-section" hidden>
+            <div class="pcl-dropzone" id="pcl-dropzone">
+              <div class="dropzone-copy">
+                <span class="upload-symbol pcl-symbol" aria-hidden="true">PCL</span>
+                <div>
+                  <h2 id="pcl-files-title" data-i18n="pclUploadTitle">Añade los archivos PCL de los edificios</h2>
+                  <p data-i18n="pclUploadBody">Cada PCL generará su propio paquete ZIP y reporte. También puedes cargar aquí un ZIP completo.</p>
+                </div>
+              </div>
+              <button class="secondary-button" id="pick-pcl-files" type="button" data-i18n="selectPcls">Seleccionar PCL</button>
+              <input id="pcl-file-input" type="file" accept=".pcl,application/octet-stream,text/plain,.zip,application/zip" multiple hidden tabindex="-1" />
+            </div>
+            <div class="pcl-file-panel" id="pcl-file-panel" hidden>
+              <div class="section-heading file-heading">
+                <div>
+                  <span class="section-kicker" data-i18n="loadedPcls">PCL cargados</span>
+                  <h2 id="pcl-file-count">0 PCL</h2>
+                </div>
+                <div class="heading-actions">
+                  <button class="secondary-button" id="add-more-pcl-files" type="button" data-i18n="addPcls">Añadir PCL</button>
+                  <button class="text-button danger-text" id="clear-pcl-files" type="button" data-i18n="removeAllPcls">Quitar todos</button>
+                </div>
+              </div>
+              <p class="queue-help" id="pcl-queue-help" data-i18n="pclQueueHelp">El orden del PCL se conserva en cada paquete.</p>
+              <ul class="file-list pcl-file-list" id="pcl-file-list" aria-describedby="pcl-queue-help"></ul>
+              <div class="load-more-row" id="pcl-list-more-row" hidden><button class="secondary-button" id="show-more-pcl-files" type="button" data-i18n="showMorePcls">Mostrar 100 PCL más</button></div>
+            </div>
+          </div>
+        </section>
+
+        <aside class="actions-card" aria-labelledby="actions-title">
+          <div class="actions-card-header">
+            <div class="section-kicker" data-i18n="operationKicker">Paso 2 · Operación</div>
+            <h2 id="actions-title" data-i18n="operationTitle">¿Qué resultado necesitas?</h2>
+          </div>
+          <div class="actions-card-body">
+            <fieldset class="mode-selector" id="mode-selector">
+              <legend class="sr-only" data-i18n="operationLegend">Selecciona una operación</legend>
+              <label class="mode-option">
+                <input type="radio" name="mode" value="split" checked />
+                <span class="mode-copy"><strong data-i18n="splitTitle">Separar por código</strong><small data-i18n="splitBody">Genera un PDF por cada valor bajo TRUSS.</small><small class="mode-outcome" data-i18n="splitOutcome">Resultado: un PDF por TRUSS</small></span>
+              </label>
+              <label class="mode-option">
+                <input type="radio" name="mode" value="merge" />
+                <span class="mode-copy"><strong data-i18n="mergeTitle">Combinar y actualizar</strong><small data-i18n="mergeBody">Conserva la versión más reciente de cada código.</small><small class="mode-outcome" data-i18n="mergeOutcome">Resultado: última versión por TRUSS</small></span>
+              </label>
+              <label class="mode-option">
+                <input type="radio" name="mode" value="pcl" />
+                <span class="mode-copy"><strong data-i18n="pclModeTitle">Generar paquetes por PCL</strong><small data-i18n="pclModeBody">Crea un ZIP por edificio con un PDF por TRUSS y su reporte.</small><small class="mode-outcome" data-i18n="pclOutcome">Resultado: un ZIP por edificio</small></span>
+              </label>
+            </fieldset>
+            <div class="priority-note" id="priority-note" hidden></div>
+            <button class="primary-button process-button" id="process-button" type="button" disabled data-i18n="addPdfsToContinue">Añade PDFs para continuar</button>
+            <p class="disabled-hint" id="process-hint" data-i18n="processHint">Selecciona al menos un PDF para habilitar esta acción.</p>
+            <div class="local-reassurance">
+              <strong data-i18n="localStrong">Tus documentos permanecen en tu equipo.</strong>
+              <span data-i18n="localBody">Solo se generan archivos locales para descargar.</span>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="progress-card" id="progress-card" hidden aria-labelledby="progress-label">
+        <div class="progress-heading">
+          <div><span class="section-kicker" data-i18n="progressKicker">Estado del proceso</span><h2 id="progress-label" tabindex="-1">Preparando archivos</h2></div>
+          <div class="progress-actions"><strong id="progress-percent">0%</strong><button class="secondary-button cancel-button" id="cancel-button" type="button" data-i18n="cancel">Cancelar</button></div>
+        </div>
+        <div class="progress-track" id="progress-track" role="progressbar" aria-labelledby="progress-label" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="progress-bar"></span></div>
+        <p id="progress-detail" class="progress-detail"></p>
+      </section>
+
+      <section class="diagnostics-card" id="diagnostics-card" hidden aria-labelledby="diagnostics-title">
+        <div class="diagnostics-heading">
+          <div>
+            <span class="section-kicker" data-i18n="diagnosticsKicker">Diagnóstico privado</span>
+            <h2 id="diagnostics-title" data-i18n="diagnosticsTitle">Evidencia de la ejecución</h2>
+          </div>
+          <span class="diagnostic-send-status" id="diagnostic-send-status" data-state="not-required"></span>
+        </div>
+        <div class="diagnostic-current">
+          <strong id="execution-short-id"></strong>
+          <button class="text-button" id="copy-execution-id" type="button" data-i18n="copyExecutionId">Copiar ID completo</button>
+        </div>
+        <p class="diagnostic-help" data-i18n="diagnosticHelp">El informe contiene solo fases, versión y cantidades agregadas.</p>
+        <div class="diagnostic-actions">
+          <button class="secondary-button" id="download-diagnostic" type="button" data-i18n="downloadDiagnostic">Descargar diagnóstico</button>
+          <button class="secondary-button" id="report-incorrect" type="button" hidden data-i18n="reportIncorrect">Reportar resultado incorrecto</button>
+        </div>
+        <details class="recent-diagnostics" id="recent-diagnostics">
+          <summary data-i18n="recentDiagnostics">Diagnósticos recientes</summary>
+          <ul id="recent-diagnostics-list"></ul>
+        </details>
+      </section>
+
+      <section class="review-card" id="review-card" hidden aria-labelledby="review-title">
+        <div class="section-heading review-heading">
+          <div>
+            <span class="section-kicker" data-i18n="reviewKicker">Revisión requerida</span>
+            <h2 id="review-title" tabindex="-1" data-i18n="reviewTitle">Confirma el resultado antes de descargar</h2>
+          </div>
+          <strong class="review-count" id="review-count"></strong>
+        </div>
+        <p class="review-help" data-i18n="reviewHelp">Revisa cada página sin identificar. Asígnale un código TRUSS exacto o confirma que debe permanecer sin identificar.</p>
+        <div class="review-replacements" id="review-replacements" hidden></div>
+        <datalist id="review-code-suggestions"></datalist>
+        <ol class="review-list" id="review-list"></ol>
+        <p class="review-validation" id="review-validation" role="alert" tabindex="-1" hidden></p>
+        <div class="review-actions">
+          <button class="text-button" id="restart-review" type="button" data-i18n="restartReview">Volver a los archivos</button>
+          <button class="secondary-button" id="keep-all-unidentified" type="button" data-i18n="keepAllUnidentified">Conservar todas sin identificar</button>
+          <button class="primary-button" id="confirm-review" type="button" data-i18n="confirmReview">Confirmar revisión</button>
+        </div>
+      </section>
+
+      <section class="results-card" id="results-card" hidden aria-labelledby="results-title">
+        <div class="section-heading results-heading">
+          <div><span class="section-kicker" data-i18n="readyToDownload">Listo para descargar</span><h2 id="results-title" tabindex="-1" data-i18n="resultsTitle">Resultados</h2></div>
+          <button class="primary-button download-all" id="download-all" type="button" hidden data-i18n="downloadZip">Descargar todo como ZIP</button>
+        </div>
+        <dl class="results-summary" id="results-summary" aria-label="Resumen del procesamiento" data-i18n-aria-label="resultsSummaryLabel"></dl>
+        <div class="operation-summary" id="operation-summary" hidden></div>
+        <div class="results-tools" id="results-tools" hidden>
+          <label class="search-field"><span data-i18n="searchByCode">Buscar por código</span><input id="result-search" type="search" placeholder="Ejemplo: F01" data-i18n-placeholder="searchPlaceholder" autocomplete="off" /></label>
+          <div class="filter-group" aria-label="Filtrar resultados" data-i18n-aria-label="filterResultsLabel">
+            <button class="filter-button is-active" id="filter-all" type="button" aria-pressed="true" data-i18n="filterAll">Todos</button>
+            <button class="filter-button" id="filter-review" type="button" aria-pressed="false" data-i18n="filterReview">Sin identificar</button>
+          </div>
+        </div>
+        <p class="result-count" id="result-count" aria-live="polite"></p>
+        <ul class="results-list" id="results-list"></ul>
+        <div class="load-more-row" id="load-more-row" hidden><button class="secondary-button" id="load-more" type="button" data-i18n="loadMore">Mostrar 30 más</button></div>
+        <div class="post-actions">
+          <button class="secondary-button" id="results-add-more" type="button" data-i18n="addMoreFiles">Añadir más archivos</button>
+          <button class="text-button" id="start-over" type="button" data-i18n="startOver">Empezar de nuevo</button>
+        </div>
+      </section>
+
+      <p class="footer-note" data-i18n="footerNote">PDF Nicaes · Procesamiento privado en tu navegador</p>
+    </main>
+
+    <dialog class="diagnostic-dialog" id="diagnostic-dialog" aria-labelledby="diagnostic-dialog-title">
+      <form method="dialog">
+        <div class="diagnostics-heading">
+          <div>
+            <span class="section-kicker" data-i18n="reportPreviewKicker">Vista previa sanitizada</span>
+            <h2 id="diagnostic-dialog-title" data-i18n="reportPreviewTitle">Reportar resultado incorrecto</h2>
+          </div>
+          <button class="text-button" id="close-diagnostic-dialog" value="cancel" data-i18n="close">Cerrar</button>
+        </div>
+        <p data-i18n="reportPreviewHelp">Estos son exactamente los campos técnicos que se enviarán; la hora se actualiza al confirmar. No contiene tus documentos ni sus datos.</p>
+        <pre id="diagnostic-preview"></pre>
+        <div class="diagnostic-actions">
+          <button class="secondary-button" id="download-incident-preview" value="download" type="button" data-i18n="downloadOnly">Solo descargar</button>
+          <button class="primary-button" id="send-incident-report" value="send" type="button" data-i18n="sendReport">Enviar diagnóstico</button>
+        </div>
+      </form>
+    </dialog>
+
+    <div class="mobile-action-bar" id="mobile-action-bar" hidden>
+      <span id="mobile-mode-label">Separar por código</span>
+      <button class="primary-button" id="mobile-process-button" type="button" data-i18n="processPdfs">Procesar PDFs</button>
+    </div>
+
+    <script src="assets/vendor/pdfjs/3.11.174/pdf.min.js"></script>
+    <script src="assets/vendor/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <script src="assets/vendor/tesseract.js/5.1.0/tesseract.min.js"></script>
+    <script src="assets/vendor/jszip/3.10.1/jszip.min.js"></script>
+    <script src="build-info.js"></script>
+    <script src="diagnostics.js?v=20260831-1"></script>
+    <script src="pcl-domain.js?v=20260825-1"></script>
+    <script src="review-domain.js?v=20260831-1"></script>
+    <script src="zip-writer.js?v=20260825-1"></script>
+    <script src="archive-import.js?v=20260827-1"></script>
+    <script src="ocr-loader.js?v=20260829-2"></script>
+    <script src="app.js?v=20260831-1"></script>
+  </body>
+</html>

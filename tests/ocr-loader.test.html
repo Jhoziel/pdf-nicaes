@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+  <meta charset="utf-8" />
+  <title>OCR loader tests</title>
+  <script src="../ocr-loader.js"></script>
+  <script>
+    window.__testResults = [];
+
+    (async () => {
+      try {
+        const worker = { terminated: false, terminate() { this.terminated = true; } };
+        const resolved = await window.PdfNicaesOcr.createWithTimeout(
+          async () => worker,
+          50,
+          () => new Error("timeout"),
+        );
+        if (resolved !== worker || worker.terminated) throw new Error("Resolved worker was not preserved");
+        window.__testResults.push({ name: "a ready OCR worker is returned", passed: true });
+      } catch (error) {
+        window.__testResults.push({ name: "a ready OCR worker is returned", passed: false, error: String(error) });
+      }
+
+      try {
+        const worker = { terminated: false, terminate() { this.terminated = true; } };
+        let rejected = false;
+        try {
+          await window.PdfNicaesOcr.createWithTimeout(
+            () => new Promise((resolve) => window.setTimeout(() => resolve(worker), 30)),
+            5,
+            () => Object.assign(new Error("timeout"), { diagnosticCode: "OCR_INIT_TIMEOUT" }),
+          );
+        } catch (error) {
+          rejected = error.message === "timeout" && error.diagnosticCode === "OCR_INIT_TIMEOUT";
+        }
+        await new Promise((resolve) => window.setTimeout(resolve, 40));
+        if (!rejected || !worker.terminated) throw new Error("Timed out worker was not cleaned up");
+        window.__testResults.push({ name: "a timed-out OCR worker is rejected and cleaned up", passed: true });
+      } catch (error) {
+        window.__testResults.push({ name: "a timed-out OCR worker is rejected and cleaned up", passed: false, error: String(error) });
+      }
+
+      try {
+        const expected = new Error("worker failed");
+        let received = null;
+        try {
+          await window.PdfNicaesOcr.createWithTimeout(
+            () => Promise.reject(expected),
+            50,
+            () => new Error("timeout"),
+          );
+        } catch (error) {
+          received = error;
+        }
+        if (received !== expected) throw new Error("The original worker failure was not preserved");
+        window.__testResults.push({ name: "an OCR worker rejection is preserved", passed: true });
+      } catch (error) {
+        window.__testResults.push({ name: "an OCR worker rejection is preserved", passed: false, error: String(error) });
+      }
+
+      try {
+        const resources = await window.PdfNicaesOcr.probeResources({
+          worker: "/worker.js",
+          language: "/language.gz",
+          coreStandard: "/core.js",
+        }, {
+          fetch: async (path) => {
+            if (path === "/worker.js") return { ok: true, status: 200 };
+            if (path === "/language.gz") return { ok: false, status: 404 };
+            throw new TypeError("PRIVATE network details");
+          },
+          timeoutMs: 50,
+        });
+        const summary = Object.fromEntries(Object.entries(resources).map(([name, result]) => [name, {
+          outcome: result.outcome,
+          httpStatus: result.httpStatus,
+          durationIsSafe: Number.isSafeInteger(result.durationMs) && result.durationMs >= 0,
+        }]));
+        const expected = {
+          worker: { outcome: "ok", httpStatus: 200, durationIsSafe: true },
+          language: { outcome: "http_error", httpStatus: 404, durationIsSafe: true },
+          coreStandard: { outcome: "network_error", httpStatus: 0, durationIsSafe: true },
+        };
+        if (JSON.stringify(summary) !== JSON.stringify(expected)) {
+          throw new Error(`Unexpected resource checks: ${JSON.stringify(summary)}`);
+        }
+        window.__testResults.push({ name: "OCR resource probes return bounded structured outcomes", passed: true });
+      } catch (error) {
+        window.__testResults.push({ name: "OCR resource probes return bounded structured outcomes", passed: false, error: String(error) });
+      }
+
+      try {
+        const stages = [
+          window.PdfNicaesOcr.stageFromStatus("loading tesseract core"),
+          window.PdfNicaesOcr.stageFromStatus("loading language traineddata"),
+          window.PdfNicaesOcr.stageFromStatus("initializing tesseract"),
+          window.PdfNicaesOcr.stageFromStatus("PRIVATE unexpected text"),
+        ];
+        if (JSON.stringify(stages) !== JSON.stringify(["core", "language", "api", "unknown"])) {
+          throw new Error(`Unexpected OCR stage mapping: ${JSON.stringify(stages)}`);
+        }
+        window.__testResults.push({ name: "Tesseract progress is reduced to stable diagnostic stages", passed: true });
+      } catch (error) {
+        window.__testResults.push({ name: "Tesseract progress is reduced to stable diagnostic stages", passed: false, error: String(error) });
+      }
+
+      const output = document.createElement("pre");
+      output.id = "test-results";
+      output.textContent = JSON.stringify(window.__testResults);
+      document.documentElement.append(output);
+    })();
+  </script>
+</html>

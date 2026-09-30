@@ -1,0 +1,3 @@
+# Enviar diagnósticos sanitizados solo para incidentes
+
+PDF Nicaes mantendrá los documentos y sus datos de negocio dentro del navegador, pero permitirá enviar a Cloudflare un subconjunto explícito y sanitizado del informe diagnóstico cuando exista un incidente de ejecución. Esta frontera acepta una salida mínima de metadatos para recuperar evidencia de fallos, sin transmitir PDFs, nombres de archivo, códigos TRUSS, texto extraído, filas PCL ni identificadores derivados del contenido; las ejecuciones normales y las cancelaciones no producirán telemetría remota. El envío ocurrirá solo desde producción, no se conservará una cola local entre sesiones y el colaborador podrá revisar el mismo contrato de datos en el informe descargable.

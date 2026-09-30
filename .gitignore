@@ -1,0 +1,23 @@
+# Datos locales de prueba y salidas de trabajo
+/local-data/**
+!/local-data/README.md
+salida-pdfs-*/
+diagnostico-truss.txt
+
+# Archivos generados por herramientas locales
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+dist/
+.wrangler/
+
+# El repositorio se distribuye como sitio web
+*.exe
+*.msi
+
+# Configuración local del editor y del sistema
+.vscode/
+.idea/
+Thumbs.db
+Desktop.ini

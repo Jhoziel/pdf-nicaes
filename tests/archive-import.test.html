@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <meta charset="utf-8" />
+  <title>Archive import tests</title>
+  <script src="../archive-import.js"></script>
+  <script>
+    window.__testResults = [];
+
+    function test(name, callback) {
+      try {
+        callback();
+        window.__testResults.push({ name, passed: true });
+      } catch (error) {
+        window.__testResults.push({ name, passed: false, error: String(error?.stack || error) });
+      }
+    }
+
+    function assertDeepEqual(actual, expected) {
+      const actualJson = JSON.stringify(actual);
+      const expectedJson = JSON.stringify(expected);
+      if (actualJson !== expectedJson) throw new Error(`Expected ${expectedJson}, received ${actualJson}`);
+    }
+
+    const fakeZip = {
+      async loadAsync() {
+        return {
+          files: {
+            "plans/Planos.pdf": {
+              name: "plans/Planos.pdf",
+              dir: false,
+              async: async () => new Uint8Array([1, 2, 3]),
+            },
+            "RF_TYPE_1.PCL": {
+              name: "RF_TYPE_1.PCL",
+              dir: false,
+              async: async () => new Uint8Array([4, 5]),
+            },
+            "notes.txt": {
+              name: "notes.txt",
+              dir: false,
+              async: async () => new Uint8Array([6]),
+            },
+            "plans/": { name: "plans/", dir: true },
+          },
+        };
+      },
+    };
+
+    (async () => {
+      try {
+        const result = await window.PdfNicaesArchive.extractZipFile(
+          new File([new Uint8Array([0])], "pack.zip", { type: "application/zip" }),
+          fakeZip,
+        );
+        assertDeepEqual(result.pdfFiles.map((file) => file.name), ["Planos.pdf"]);
+        assertDeepEqual(result.pclFiles.map((file) => file.name), ["RF_TYPE_1.PCL"]);
+        assertDeepEqual(result.ignoredEntries, 1);
+        window.__testResults.push({ name: "a ZIP separates PDF and PCL entries", passed: true });
+      } catch (error) {
+        window.__testResults.push({
+          name: "a ZIP separates PDF and PCL entries",
+          passed: false,
+          error: String(error?.stack || error),
+        });
+      }
+
+      const output = document.createElement("pre");
+      output.id = "test-results";
+      output.textContent = JSON.stringify(window.__testResults);
+      document.documentElement.append(output);
+    })();
+  </script>
+</html>

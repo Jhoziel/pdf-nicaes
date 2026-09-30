@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <meta charset="utf-8" />
+  <title>Result review domain tests</title>
+  <script src="../review-domain.js"></script>
+  <script>
+    window.__testResults = [];
+
+    function test(name, callback) {
+      try {
+        callback();
+        window.__testResults.push({ name, passed: true });
+      } catch (error) {
+        window.__testResults.push({ name, passed: false, error: String(error?.stack || error) });
+      }
+    }
+
+    function assertDeepEqual(actual, expected) {
+      const actualJson = JSON.stringify(actual);
+      const expectedJson = JSON.stringify(expected);
+      if (actualJson !== expectedJson) throw new Error(`Expected ${expectedJson}, received ${actualJson}`);
+    }
+
+    test("review is required for unidentified pages or merge replacements", () => {
+      const unidentified = window.PdfNicaesReview.createSession({
+        mode: "split",
+        sources: [{ id: "a", name: "A.pdf", pages: [{ pageNumber: 1, label: "SIN-IDENTIFICAR" }] }],
+      });
+      const replaced = window.PdfNicaesReview.createSession({
+        mode: "merge",
+        sources: [{ id: "a", name: "A.pdf", pages: [{ pageNumber: 1, label: "F01" }] }],
+        replacements: [{ code: "F01", winner: "B.pdf", discarded: ["A.pdf"] }],
+      });
+      const clean = window.PdfNicaesReview.createSession({
+        mode: "split",
+        sources: [{ id: "a", name: "A.pdf", pages: [{ pageNumber: 1, label: "F01" }] }],
+      });
+
+      assertDeepEqual(
+        [unidentified.required, replaced.required, clean.required],
+        [true, true, false],
+      );
+    });
+
+    test("confirmation assigns exact normalized codes or explicitly keeps pages unidentified", () => {
+      const sources = [{
+        id: "source-a",
+        name: "A.pdf",
+        pages: [
+          { pageNumber: 1, label: "SIN-IDENTIFICAR" },
+          { pageNumber: 2, label: "SIN-IDENTIFICAR" },
+        ],
+      }];
+      const session = window.PdfNicaesReview.createSession({ mode: "split", sources });
+      const confirmation = window.PdfNicaesReview.confirm(session, [
+        { sourceId: "source-a", pageNumber: 1, action: "assign", code: " f02a " },
+        { sourceId: "source-a", pageNumber: 2, action: "keep" },
+      ]);
+
+      assertDeepEqual({
+        labels: confirmation.sources[0].pages.map((page) => page.label),
+        manualAssignmentCount: confirmation.manualAssignmentCount,
+        keptUnidentifiedCount: confirmation.keptUnidentifiedCount,
+        originalLabels: sources[0].pages.map((page) => page.label),
+      }, {
+        labels: ["F02A", "SIN-IDENTIFICAR"],
+        manualAssignmentCount: 1,
+        keptUnidentifiedCount: 1,
+        originalLabels: ["SIN-IDENTIFICAR", "SIN-IDENTIFICAR"],
+      });
+    });
+
+    test("confirmation requires one valid explicit decision for every unidentified page", () => {
+      const session = window.PdfNicaesReview.createSession({
+        mode: "split",
+        sources: [{ id: "a", name: "A.pdf", pages: [{ pageNumber: 1, label: "SIN-IDENTIFICAR" }] }],
+      });
+      const invalidCases = [
+        [],
+        [{ sourceId: "a", pageNumber: 1, action: "assign", code: "" }],
+        [{ sourceId: "a", pageNumber: 1, action: "assign", code: "SIN-IDENTIFICAR" }],
+        [{ sourceId: "a", pageNumber: 1, action: "assign", code: "F 01" }],
+        [{ sourceId: "a", pageNumber: 1, action: "ignore" }],
+      ];
+      const errorCodes = invalidCases.map((decisions) => {
+        try {
+          window.PdfNicaesReview.confirm(session, decisions);
+          return null;
+        } catch (error) {
+          return error.code;
+        }
+      });
+
+      assertDeepEqual(errorCodes, [
+        "REVIEW_INCOMPLETE",
+        "REVIEW_CODE_INVALID",
+        "REVIEW_CODE_INVALID",
+        "REVIEW_CODE_INVALID",
+        "REVIEW_DECISION_INVALID",
+      ]);
+    });
+
+    test("confirmation rejects duplicate or out-of-scope page decisions", () => {
+      const session = window.PdfNicaesReview.createSession({
+        mode: "split",
+        sources: [{ id: "a", name: "A.pdf", pages: [{ pageNumber: 1, label: "SIN-IDENTIFICAR" }] }],
+      });
+      const invalidCases = [
+        [
+          { sourceId: "a", pageNumber: 1, action: "keep" },
+          { sourceId: "a", pageNumber: 1, action: "assign", code: "F01" },
+        ],
+        [
+          { sourceId: "a", pageNumber: 1, action: "keep" },
+          { sourceId: "a", pageNumber: 2, action: "keep" },
+        ],
+      ];
+      const errorCodes = invalidCases.map((decisions) => {
+        try {
+          window.PdfNicaesReview.confirm(session, decisions);
+          return null;
+        } catch (error) {
+          return error.code;
+        }
+      });
+      assertDeepEqual(errorCodes, ["REVIEW_DECISION_DUPLICATE", "REVIEW_DECISION_UNKNOWN"]);
+    });
+
+    test("a follow-up replacement review does not request already resolved pages", () => {
+      const source = {
+        id: "a",
+        name: "A.pdf",
+        pages: [{ pageNumber: 1, label: "SIN-IDENTIFICAR", manuallyKeptUnidentified: true }],
+      };
+      const session = window.PdfNicaesReview.createSession({
+        mode: "merge",
+        sources: [source],
+        replacements: [{ code: "F01", winner: "B.pdf", discarded: ["A.pdf"] }],
+        resolvedPages: [{ sourceId: "a", pageNumber: 1 }],
+      });
+      assertDeepEqual({ required: session.required, unidentified: session.unidentified }, {
+        required: true,
+        unidentified: [],
+      });
+    });
+
+    const output = document.createElement("pre");
+    output.id = "test-results";
+    output.textContent = JSON.stringify(window.__testResults);
+    document.documentElement.append(output);
+  </script>
+</html>

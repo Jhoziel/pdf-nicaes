@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <meta charset="utf-8" />
+  <title>Streaming ZIP writer tests</title>
+  <script src="../zip-writer.js"></script>
+  <script>
+    window.__testResults = [];
+    window.__testsComplete = false;
+
+    (async () => {
+      try {
+        const sink = window.ZipWriter.createBlobSink();
+        const archive = new window.ZipWriter.Archive(sink);
+        await archive.add("F01.pdf", new TextEncoder().encode("fake pdf"));
+        await archive.add("reporte.txt", "todo bien");
+        const blob = await archive.close();
+        const bytes = new Uint8Array(await blob.arrayBuffer());
+        let binary = "";
+        for (const byte of bytes) binary += String.fromCharCode(byte);
+        window.__zipArtifact = btoa(binary);
+        window.__testResults.push({ name: "an incremental ZIP opens with standard readers", passed: true });
+      } catch (error) {
+        window.__testResults.push({
+          name: "an incremental ZIP opens with standard readers",
+          passed: false,
+          error: String(error?.stack || error),
+        });
+      }
+
+      try {
+        const invalidNames = ["../escape.txt", "/absolute.txt", "C:/absolute.txt", "folder//empty.txt", "folder/../escape.txt"];
+        for (const name of invalidNames) {
+          const archive = new window.ZipWriter.Archive(window.ZipWriter.createBlobSink());
+          let rejected = false;
+          try {
+            await archive.add(name, "unsafe");
+          } catch (error) {
+            rejected = error instanceof TypeError;
+          }
+          if (!rejected) throw new Error(`Expected unsafe ZIP path to be rejected: ${name}`);
+        }
+
+        const archive = new window.ZipWriter.Archive(window.ZipWriter.createBlobSink());
+        await archive.add("report.txt", "first");
+        let duplicateRejected = false;
+        try {
+          await archive.add("REPORT.txt", "second");
+        } catch (error) {
+          duplicateRejected = error instanceof TypeError;
+        }
+        if (!duplicateRejected) throw new Error("Expected duplicate ZIP path to be rejected");
+        window.__testResults.push({ name: "unsafe and duplicate ZIP paths are rejected", passed: true });
+      } catch (error) {
+        window.__testResults.push({
+          name: "unsafe and duplicate ZIP paths are rejected",
+          passed: false,
+          error: String(error?.stack || error),
+        });
+      } finally {
+        window.__testsComplete = true;
+        const output = document.createElement("pre");
+        output.id = "test-results";
+        output.textContent = JSON.stringify(window.__testResults);
+        document.documentElement.append(output);
+      }
+    })();
+  </script>
+</html>

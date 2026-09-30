@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <meta charset="utf-8" />
+  <title>PCL domain tests</title>
+  <script src="../pcl-domain.js"></script>
+  <script>
+    window.__testResults = [];
+
+    function test(name, callback) {
+      try {
+        callback();
+        window.__testResults.push({ name, passed: true });
+      } catch (error) {
+        window.__testResults.push({ name, passed: false, error: String(error?.stack || error) });
+      }
+    }
+
+    function assertDeepEqual(actual, expected) {
+      const actualJson = JSON.stringify(actual);
+      const expectedJson = JSON.stringify(expected);
+      if (actualJson !== expectedJson) {
+        throw new Error(`Expected ${expectedJson}, received ${actualJson}`);
+      }
+    }
+
+    function assertIncludes(actual, expectedPart) {
+      if (!actual.includes(expectedPart)) {
+        throw new Error(`Expected ${JSON.stringify(actual)} to include ${JSON.stringify(expectedPart)}`);
+      }
+    }
+
+    test("a PCL yields exact normalized codes, duplicate entries, and invalid rows", () => {
+      const parsed = window.PclDomain.parsePcl([
+        "4 2",
+        "C:\\F01.tre 24 1",
+        "D:\\plans\\f05a.TRE 1 1",
+        "C:\\F01.tre 99 2",
+        "not a truss row",
+      ].join("\r\n"));
+
+      assertDeepEqual(parsed.codes, ["F01", "F05A"]);
+      assertDeepEqual(parsed.duplicates, ["F01"]);
+      assertDeepEqual(parsed.invalidLines, [{ lineNumber: 5, text: "not a truss row" }]);
+      assertDeepEqual(parsed.isValid, true);
+    });
+
+    test("a package groups pages from one source and excludes cross-source conflicts", () => {
+      const parsed = window.PclDomain.parsePcl([
+        "3 2",
+        "C:\\F01.tre 1 1",
+        "C:\\F02.tre 1 1",
+        "C:\\F03.tre 1 1",
+      ].join("\r\n"));
+      const plan = window.PclDomain.planPackage(parsed, [
+        {
+          id: "source-a",
+          name: "Planos-A.pdf",
+          pages: [
+            { pageNumber: 1, label: "F01" },
+            { pageNumber: 2, label: "F01" },
+            { pageNumber: 3, label: "F02" },
+          ],
+        },
+        {
+          id: "source-b",
+          name: "Planos-B.pdf",
+          pages: [{ pageNumber: 1, label: "f02" }],
+        },
+      ]);
+
+      assertDeepEqual(plan.status, "partial");
+      assertDeepEqual(plan.available, [{
+        code: "F01",
+        sourceId: "source-a",
+        sourceName: "Planos-A.pdf",
+        pageNumbers: [1, 2],
+      }]);
+      assertDeepEqual(plan.conflicts, [{
+        code: "F02",
+        sources: ["Planos-A.pdf", "Planos-B.pdf"],
+      }]);
+      assertDeepEqual(plan.missing, ["F03"]);
+    });
+
+    test("a Spanish PCL report explains included, missing, conflicting, and malformed entries", () => {
+      const parsed = {
+        codes: ["F01", "F02", "F03"],
+        duplicates: ["F01"],
+        invalidLines: [{ lineNumber: 6, text: "fila dañada" }],
+        isValid: true,
+      };
+      const plan = {
+        status: "partial",
+        available: [{
+          code: "F01",
+          sourceId: "source-a",
+          sourceName: "Planos-A.pdf",
+          pageNumbers: [1, 2],
+        }],
+        conflicts: [{ code: "F02", sources: ["Planos-A.pdf", "Planos-B.pdf"] }],
+        missing: ["F03"],
+      };
+      const report = window.PclDomain.buildReport({
+        pclName: "EdificioNorte.PCL",
+        parsed,
+        plan,
+        language: "es",
+      });
+
+      assertIncludes(report, "PCL: EdificioNorte.PCL");
+      assertIncludes(report, "Estado: Parcial");
+      assertIncludes(report, "F01 — Planos-A.pdf — páginas 1, 2");
+      assertIncludes(report, "F02 — Planos-A.pdf, Planos-B.pdf");
+      assertIncludes(report, "F03");
+      assertIncludes(report, "F01");
+      assertIncludes(report, "Línea 6: fila dañada");
+    });
+
+    test("package names preserve the PCL stem and disambiguate collisions", () => {
+      assertDeepEqual(
+        window.PclDomain.assignPackageNames([
+          "Foo.PCL",
+          "Foo (2).PCL",
+          "Foo.pcl",
+        ]),
+        ["Foo", "Foo (2)", "Foo (3)"],
+      );
+    });
+
+    test("invalid PCL files and valid PCL files with no matches have distinct states", () => {
+      const invalid = window.PclDomain.parsePcl("2 2\r\nbroken row");
+      const valid = window.PclDomain.parsePcl("1 2\r\nC:\\F99.tre 1 1");
+
+      assertDeepEqual(window.PclDomain.planPackage(invalid, []).status, "invalid");
+      assertDeepEqual(window.PclDomain.planPackage(valid, []).status, "no_matches");
+    });
+
+    const output = document.createElement("pre");
+    output.id = "test-results";
+    output.textContent = JSON.stringify(window.__testResults);
+    document.documentElement.append(output);
+  </script>
+</html>
