@@ -10,6 +10,7 @@
   const SCHEMA_VERSION = 1;
   const COUNT_FIELDS = new Set([
     "pdfCount",
+    "treCount",
     "pclCount",
     "pagesTotal",
     "pagesInspected",
@@ -256,7 +257,7 @@
         build,
         browser,
         ...(runtime ? { runtime: clone(runtime) } : {}),
-        mode: ["split", "merge", "pcl"].includes(mode) ? mode : "split",
+        mode: ["split", "merge", "pcl", "tre-pcl"].includes(mode) ? mode : "split",
         outcome: "processing",
         phase: "preparing",
         startedAt: timestamp(startedMs),

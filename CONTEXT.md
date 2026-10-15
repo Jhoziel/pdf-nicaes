@@ -12,6 +12,10 @@ _Avoid_: Nombre de archivo, código aproximado
 PDF aportado al lote como posible origen de una o más TRUSS solicitadas.
 _Avoid_: Paquete PCL, PCL de edificio
 
+**Archivo TRE fuente**:
+Archivo `.TRE` aportado para copiarlo a la carpeta de cada PCL que solicite su nombre base exacto, sin distinguir mayúsculas y minúsculas.
+_Avoid_: PDF TRUSS, salida PCL
+
 **PCL de edificio**:
 Archivo de control cuyo nombre identifica un edificio y cuyo listado define los códigos TRUSS solicitados para ese edificio. Los campos distintos del nombre `.tre` no forman parte de la solicitud.
 _Avoid_: PDF de control, lista de cantidades

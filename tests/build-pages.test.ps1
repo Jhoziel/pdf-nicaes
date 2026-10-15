@@ -92,7 +92,7 @@ try {
     foreach ($config in @('deploy/nginx-public-ip.conf', 'deploy/nginx-port-8080.conf')) {
         $nginx = Get-Content -Raw -LiteralPath (Join-Path $projectRoot $config)
         $location = [regex]::Match($nginx, 'location ~ (\S+) \{').Groups[1].Value
-        foreach ($asset in @('app.js', 'diagnostics.js', 'pcl-domain.js', 'review-domain.js',
+        foreach ($asset in @('app.js', 'diagnostics.js', 'pcl-domain.js', 'tre-pcl-domain.js', 'review-domain.js',
             'zip-writer.js', 'archive-import.js', 'ocr-loader.js', 'styles.css')) {
             if ("/$asset" -notmatch $location) { throw "$config blocks $asset." }
         }

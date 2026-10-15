@@ -20,7 +20,7 @@ from playwright.sync_api import sync_playwright
 ROOT = Path(__file__).resolve().parents[1]
 WEB_FILES = {
     "index.html", "styles.css", "app.js", "diagnostics.js", "build-info.js",
-    "pcl-domain.js", "review-domain.js", "zip-writer.js", "archive-import.js", "ocr-loader.js",
+    "pcl-domain.js", "tre-pcl-domain.js", "review-domain.js", "zip-writer.js", "archive-import.js", "ocr-loader.js",
     "assets/nicaes-logo-white.png", "assets/vendor/manifest.sha256", "assets/vendor/THIRD_PARTY_NOTICES.md",
 }
 

@@ -14,7 +14,7 @@ script writes those values into `dist/build-info.js`; missing or invalid metadat
 forces `local-dev` and disables remote diagnostics. Before creating the bundle,
 the build verifies the pinned vendor SHA-256 manifest and Cloudflare's 25 MiB
 per-asset limit. It creates a clean static bundle containing `index.html`,
-`styles.css`, `app.js`, `diagnostics.js`, `build-info.js`, `pcl-domain.js`, `review-domain.js`,
+`styles.css`, `app.js`, `diagnostics.js`, `build-info.js`, `pcl-domain.js`, `tre-pcl-domain.js`, `review-domain.js`,
 `zip-writer.js`, `_headers`, and the curated `assets/` directory. The browser
 bundle also includes `archive-import.js`, `ocr-loader.js`, and same-origin PDF,
 ZIP, font, WebAssembly, and OCR resources.

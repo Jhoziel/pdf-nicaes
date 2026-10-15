@@ -64,6 +64,9 @@
   --pcl-accent: #6858c8;
   --pcl-surface: #f5f3ff;
   --pcl-icon: #e8e4ff;
+  --tre-accent: #087f78;
+  --tre-surface: #eaf8f6;
+  --tre-icon: #d1f0eb;
   --shadow: 0 14px 34px rgba(27, 53, 82, 0.08);
 }
 
@@ -101,6 +104,9 @@
   --pcl-accent: #a094ef;
   --pcl-surface: #191d36;
   --pcl-icon: #2d2a54;
+  --tre-accent: #64d5c7;
+  --tre-surface: #142b30;
+  --tre-icon: #20464a;
   --shadow: 0 16px 38px rgba(0, 0, 0, .24);
 }
 
@@ -401,6 +407,9 @@ summary:focus-visible,
 }
 
 .upload-card { min-width: 0; overflow: hidden; border-radius: 9px; }
+.upload-card.is-tre-pcl { display: flex; flex-direction: column; }
+.upload-card.is-tre-pcl .tre-upload-section { order: 1; }
+.upload-card.is-tre-pcl .pcl-upload-section { order: 2; }
 .dropzone {
   display: flex;
   min-height: 206px;
@@ -458,6 +467,18 @@ summary:focus-visible,
 .pcl-file-item .file-icon { background: var(--pcl-icon); color: var(--pcl-accent); }
 .pcl-dropzone .secondary-button { border-color: var(--pcl-accent); color: var(--pcl-accent); }
 .pcl-dropzone .secondary-button:hover:not(:disabled) { border-color: var(--pcl-accent); background: var(--pcl-icon); }
+.tre-upload-section { border-top: 1px solid var(--line); background: var(--tre-surface); box-shadow: inset 4px 0 var(--tre-accent); }
+.tre-dropzone { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 18px 20px; border: 2px dashed transparent; }
+.tre-dropzone.is-dragging { border-color: var(--tre-accent); background: var(--tre-icon); }
+.tre-dropzone h2 { margin: 0; font-size: 16px; letter-spacing: -.025em; }
+.tre-dropzone p { margin: 4px 0 0; color: var(--muted); font-size: 11px; line-height: 1.45; }
+.tre-symbol { width: 40px; height: 40px; background: var(--tre-icon); color: var(--tre-accent); font-size: 10px; }
+.tre-file-panel { padding: 0 20px 20px; }
+.tre-file-list { max-height: 280px; }
+.tre-file-item { cursor: default; }
+.tre-file-item .file-icon { background: var(--tre-icon); color: var(--tre-accent); }
+.tre-dropzone .secondary-button { border-color: var(--tre-accent); color: var(--tre-accent); }
+.tre-dropzone .secondary-button:hover:not(:disabled) { border-color: var(--tre-accent); background: var(--tre-icon); }
 
 .primary-button, .secondary-button, .text-button, .filter-button, .file-control {
   min-height: 40px;
@@ -754,6 +775,8 @@ summary:focus-visible,
   .upload-card.has-files .dropzone-copy { display: none; }
   .pcl-dropzone { align-items: stretch; flex-direction: column; padding: 16px; }
   .pcl-file-panel { padding: 0 16px 16px; }
+  .tre-dropzone { align-items: stretch; flex-direction: column; padding: 16px; }
+  .tre-file-panel { padding: 0 16px 16px; }
   .pick-files-button { min-height: 44px; }
   .file-panel, .progress-card, .results-card, .diagnostics-card, .review-card { padding: 16px; }
   .diagnostics-heading, .diagnostic-current { align-items: flex-start; flex-direction: column; }

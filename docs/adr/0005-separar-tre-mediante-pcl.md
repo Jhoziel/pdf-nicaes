@@ -1,0 +1,3 @@
+# Separar archivos TRE mediante PCL
+
+La nueva operación recibe archivos TRE y PCL, compara cada nombre base solicitado con los archivos cargados y reúne las coincidencias en una carpeta por PCL. La comparación no distingue mayúsculas, pero exige coincidencia completa. Las entradas PCL repetidas se deduplican según el contrato existente. Los nombres TRE repetidos se tratan como conflictos y ninguno se copia para evitar escoger una fuente arbitraria. Cada carpeta contiene un reporte para conservar el resultado de solicitudes faltantes, conflictivas o de un PCL inválido. La descarga contiene todas las carpetas en un solo ZIP y se genera bajo demanda.

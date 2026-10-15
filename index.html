@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Separa planos PDF por TRUSS y combina documentos." data-i18n-content="metaDescription" />
-    <title data-i18n="documentTitle">PDF Nicaes - separar y combinar</title>
-    <link rel="stylesheet" href="styles.css?v=20260831-1" />
+    <meta name="description" content="Organiza planos PDF y archivos TRE usando códigos TRUSS y PCL." data-i18n-content="metaDescription" />
+    <title data-i18n="documentTitle">PDF Nicaes - planos PDF y archivos TRE</title>
+    <link rel="stylesheet" href="styles.css?v=20261015-1" />
   </head>
   <body>
     <main class="app-shell">
@@ -92,7 +92,7 @@
                 <span class="upload-symbol pcl-symbol" aria-hidden="true">PCL</span>
                 <div>
                   <h2 id="pcl-files-title" data-i18n="pclUploadTitle">Añade los archivos PCL de los edificios</h2>
-                  <p data-i18n="pclUploadBody">Cada PCL generará su propio paquete ZIP y reporte. También puedes cargar aquí un ZIP completo.</p>
+                  <p id="pcl-upload-body" data-i18n="pclUploadBody">Cada PCL generará su propio paquete ZIP y reporte. También puedes cargar aquí un ZIP completo.</p>
                 </div>
               </div>
               <button class="secondary-button" id="pick-pcl-files" type="button" data-i18n="selectPcls">Seleccionar PCL</button>
@@ -112,6 +112,34 @@
               <p class="queue-help" id="pcl-queue-help" data-i18n="pclQueueHelp">El orden del PCL se conserva en cada paquete.</p>
               <ul class="file-list pcl-file-list" id="pcl-file-list" aria-describedby="pcl-queue-help"></ul>
               <div class="load-more-row" id="pcl-list-more-row" hidden><button class="secondary-button" id="show-more-pcl-files" type="button" data-i18n="showMorePcls">Mostrar 100 PCL más</button></div>
+            </div>
+          </div>
+
+          <div class="tre-upload-section" id="tre-upload-section" hidden>
+            <div class="tre-dropzone" id="tre-dropzone">
+              <div class="dropzone-copy">
+                <span class="upload-symbol tre-symbol" aria-hidden="true">TRE</span>
+                <div>
+                  <h2 id="tre-files-title" data-i18n="treUploadTitle">Añade los archivos .TRE</h2>
+                  <p data-i18n="treUploadBody">Se incluirá cada archivo cuyo nombre aparezca en un PCL.</p>
+                </div>
+              </div>
+              <button class="secondary-button" id="pick-tre-files" type="button" data-i18n="selectTres">Seleccionar TRE</button>
+              <input id="tre-file-input" type="file" accept=".tre,application/octet-stream" multiple hidden tabindex="-1" />
+            </div>
+            <div class="tre-file-panel" id="tre-file-panel" hidden>
+              <div class="section-heading file-heading">
+                <div>
+                  <span class="section-kicker" data-i18n="loadedTres">TRE cargados</span>
+                  <h2 id="tre-file-count">0 TRE</h2>
+                </div>
+                <div class="heading-actions">
+                  <button class="secondary-button" id="add-more-tre-files" type="button" data-i18n="addTres">Añadir TRE</button>
+                  <button class="text-button danger-text" id="clear-tre-files" type="button" data-i18n="removeAllTres">Quitar todos</button>
+                </div>
+              </div>
+              <ul class="file-list tre-file-list" id="tre-file-list"></ul>
+              <div class="load-more-row" id="tre-list-more-row" hidden><button class="secondary-button" id="show-more-tre-files" type="button" data-i18n="showMoreTres">Mostrar 100 TRE más</button></div>
             </div>
           </div>
         </section>
@@ -135,6 +163,10 @@
               <label class="mode-option">
                 <input type="radio" name="mode" value="pcl" />
                 <span class="mode-copy"><strong data-i18n="pclModeTitle">Generar paquetes por PCL</strong><small data-i18n="pclModeBody">Crea un ZIP por edificio con un PDF por TRUSS y su reporte.</small><small class="mode-outcome" data-i18n="pclOutcome">Resultado: un ZIP por edificio</small></span>
+              </label>
+              <label class="mode-option">
+                <input type="radio" name="mode" value="tre-pcl" />
+                <span class="mode-copy"><strong data-i18n="trePclModeTitle">Separar archivos TRE por PCL</strong><small data-i18n="trePclModeBody">Organiza los archivos .TRE solicitados en una carpeta por PCL.</small><small class="mode-outcome" data-i18n="trePclOutcome">Resultado: un ZIP con una carpeta por PCL</small></span>
               </label>
             </fieldset>
             <div class="priority-note" id="priority-note" hidden></div>
@@ -256,10 +288,11 @@
     <script src="build-info.js"></script>
     <script src="diagnostics.js?v=20260831-1"></script>
     <script src="pcl-domain.js?v=20260825-1"></script>
+    <script src="tre-pcl-domain.js?v=20261015-1"></script>
     <script src="review-domain.js?v=20260831-1"></script>
     <script src="zip-writer.js?v=20260825-1"></script>
     <script src="archive-import.js?v=20260827-1"></script>
     <script src="ocr-loader.js?v=20260829-2"></script>
-    <script src="app.js?v=20260831-1"></script>
+    <script src="app.js?v=20261015-1"></script>
   </body>
 </html>

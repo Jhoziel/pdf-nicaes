@@ -38,7 +38,7 @@ try {
     Write-Host 'Preparando los archivos del sitio...'
     $webFiles = @(
         'index.html', 'styles.css', 'app.js', 'diagnostics.js',
-        'pcl-domain.js', 'review-domain.js', 'zip-writer.js',
+        'pcl-domain.js', 'tre-pcl-domain.js', 'review-domain.js', 'zip-writer.js',
         'archive-import.js', 'ocr-loader.js',
         'assets/nicaes-logo-white.png',
         'assets/vendor/THIRD_PARTY_NOTICES.md', 'assets/vendor/manifest.sha256'

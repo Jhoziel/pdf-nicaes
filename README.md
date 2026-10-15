@@ -23,13 +23,15 @@ Abre la dirección del sitio en el navegador, carga tus archivos y elige:
 - **Separar por código:** agrupa las páginas que pertenecen a la misma TRUSS.
 - **Combinar todos:** conserva la versión del último archivo cargado cuando se repite una TRUSS. Puedes cambiar el orden antes de procesar.
 - **Paquetes por PCL:** prepara un ZIP por edificio con las TRUSS disponibles y un reporte. También acepta un ZIP de entrada con PDFs y PCL.
+- **Separar TRE por PCL:** carga archivos `.TRE` y PCL; cada PCL crea una carpeta con los archivos TRE solicitados y un reporte. Todas las carpetas se descargan juntas en un ZIP.
 
 Si aparecen páginas sin identificar o reemplazos, revisa el resultado y confírmalo antes de descargar.
 
-Los documentos se procesan dentro del navegador. El servidor entrega la página y sus recursos; no recibe los PDFs ni los archivos PCL. El paquete para Nicaes conserva el diagnóstico descargable y no envía incidentes a un servidor. El despliegue alternativo en Cloudflare puede enviar únicamente diagnósticos técnicos sanitizados cuando ocurre un incidente.
+Los documentos se procesan dentro del navegador. El servidor entrega la página y sus recursos; no recibe los PDFs, archivos TRE ni PCL. El paquete para Nicaes conserva el diagnóstico descargable y no envía incidentes a un servidor. El despliegue alternativo en Cloudflare puede enviar únicamente diagnósticos técnicos sanitizados cuando ocurre un incidente.
 
 ## Documentación técnica
 
 - [Desarrollo y pruebas](docs/desarrollo.md).
+- [Separación de archivos TRE por PCL](docs/specs/tre-pcl-folders.md).
 - [Publicación técnica y alternativa Cloudflare](deploy/README.md).
 - [Vocabulario del proyecto](CONTEXT.md).

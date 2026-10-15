@@ -63,10 +63,10 @@ Campos permitidos:
 - Versión de esquema.
 - UUID y número de intento de descarga, cuando corresponda.
 - SHA completo, SHA corto y canal de despliegue.
-- Modo de procesamiento.
+- Modo de procesamiento (`split`, `merge`, `pcl` o `tre-pcl`).
 - Desenlace, fase y código estable de error.
 - Timestamps, duración total y duración por fase.
-- Cantidades agregadas de PDFs, PCL, páginas inspeccionadas, páginas OCR, asignaciones manuales, hojas conservadas sin identificar, resultados, artefactos e intentos de descarga completados o fallidos.
+- Cantidades agregadas de PDFs, archivos TRE, PCL, páginas inspeccionadas, páginas OCR, asignaciones manuales, hojas conservadas sin identificar, resultados, artefactos e intentos de descarga completados o fallidos.
 - Perfil agregado de detección.
 - Familia y versión mayor del navegador.
 - Capacidades booleanas del runtime (`Worker`, WebAssembly, contexto seguro, aislamiento y estado en línea) y revisión del contrato diagnóstico.

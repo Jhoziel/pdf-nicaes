@@ -28,6 +28,7 @@ cp -- \
   "$project_root/app.js" \
   "$project_root/diagnostics.js" \
   "$project_root/pcl-domain.js" \
+  "$project_root/tre-pcl-domain.js" \
   "$project_root/review-domain.js" \
   "$project_root/zip-writer.js" \
   "$project_root/archive-import.js" \

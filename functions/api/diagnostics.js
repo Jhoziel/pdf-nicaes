@@ -23,6 +23,7 @@ const TOP_LEVEL_FIELDS = new Set([
 ]);
 const COUNT_FIELDS = new Set([
   "pdfCount",
+  "treCount",
   "pclCount",
   "pagesTotal",
   "pagesInspected",
@@ -204,7 +205,7 @@ function validDiagnostic(value) {
   if (!hasExactFields(value.browser, new Set(["family", "major"]))) return false;
   if (!/^[A-Za-z ]{1,24}$/.test(value.browser.family) || !/^(?:\d{1,3}|unknown)$/.test(value.browser.major)) return false;
   if (value.runtime !== undefined && !validRuntime(value.runtime)) return false;
-  if (!["split", "merge", "pcl"].includes(value.mode) || value.outcome !== "incident") return false;
+  if (!["split", "merge", "pcl", "tre-pcl"].includes(value.mode) || value.outcome !== "incident") return false;
   if (!PHASES.has(value.phase) || !/^[A-Z][A-Z0-9_]{0,63}$/.test(value.errorCode)) return false;
   if (value.download !== null) {
     if (!hasExactFields(value.download, new Set(["attempt", "kind"]))) return false;

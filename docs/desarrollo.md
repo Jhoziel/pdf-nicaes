@@ -7,7 +7,7 @@ Esta documentación es para quien modifica el código. Para administrar la publi
 La aplicación es HTML, CSS y JavaScript estático. Procesa PDFs y PCL en el navegador. Las bibliotecas, fuentes, workers, núcleos WebAssembly y modelo OCR se sirven desde `assets/vendor/`, sin depender de CDN durante el procesamiento.
 
 - `app.js`: detección, procesamiento, revisión de resultados y descargas.
-- `pcl-domain.js`, `review-domain.js`: contratos de paquetes PCL y revisión.
+- `pcl-domain.js`, `tre-pcl-domain.js`, `review-domain.js`: contratos de paquetes PDF por PCL, carpetas TRE por PCL y revisión.
 - `archive-import.js`, `zip-writer.js`, `ocr-loader.js`: importación de ZIP, generación incremental de paquetes e inicialización de OCR.
 - `diagnostics.js`, `build-info.js`: diagnóstico sanitizado e identificación del despliegue.
 - `worker.js`, `functions/`, `wrangler.jsonc`: alternativa de Cloudflare; no forman parte del ZIP estático.

@@ -6,7 +6,7 @@ Esta guía te acompaña desde la descarga del proyecto hasta su publicación y m
 
 PDF Nicaes es una página para separar, combinar y organizar planos PDF. **Publicar** significa colocar los archivos de la página en una computadora de Nicaes que los navegadores puedan visitar. Esa computadora es el **servidor**.
 
-Los PDFs se procesan en la computadora de la persona que abre la página. No se guardan en el servidor. Para esta versión no necesitas instalar Python, Node, Tesseract ni una base de datos en el servidor. El reconocimiento de texto de imágenes, llamado **OCR**, ya viene incluido entre los archivos del sitio.
+Los PDFs, archivos TRE y PCL se procesan en la computadora de la persona que abre la página. No se guardan en el servidor. Para esta versión no necesitas instalar Python, Node, Tesseract ni una base de datos en el servidor. El reconocimiento de texto de imágenes, llamado **OCR**, ya viene incluido entre los archivos del sitio.
 
 **Resultado esperado:** tendrás una dirección web que tus compañeros podrán abrir. No se instala un programa en cada computadora.
 
@@ -118,6 +118,7 @@ Abre la dirección en Chrome o Edge actualizado y realiza estas comprobaciones:
 4. **Revisar:** si aparece una página sin identificar, revisa la imagen y asigna el código correcto o elige conservarla sin identificar. Confirma para continuar.
 5. **OCR:** procesa un PDF escaneado. La primera lectura puede tardar más. Comprueba que termine y revisa las páginas cuyo código no se pudo identificar.
 6. **PCL:** carga los PDFs fuente y un PCL de edificio. Genera el paquete, descarga su ZIP y comprueba los PDFs y el reporte de faltantes o conflictos.
+7. **TRE por PCL:** carga archivos `.TRE` y uno o más PCL. Descarga el ZIP y comprueba que haya una carpeta por PCL, con los archivos coincidentes y su reporte.
 
 **Resultado esperado:** puedes abrir las descargas y su contenido es el esperado. Si un reporte indica TRUSS faltantes, compara los archivos de entrada: eso por sí solo no significa que el servidor esté fallando.
 

@@ -22,8 +22,8 @@ const UNIDENTIFIED_LABEL = "SIN-IDENTIFICAR";
 
 const translations = {
   es: {
-    metaDescription: "Separa planos PDF por TRUSS y combina documentos.",
-    documentTitle: "PDF Nicaes - separar y combinar",
+    metaDescription: "Organiza planos PDF y archivos TRE usando códigos TRUSS y PCL.",
+    documentTitle: "PDF Nicaes - planos PDF y archivos TRE",
     brandHome: "PDF Nicaes, inicio",
     languageSelectorLabel: "Idioma",
     languageSpanishLabel: "Usar español",
@@ -34,7 +34,7 @@ const translations = {
     themeSwitchToLight: "Cambiar a modo claro",
     themeSwitchToDark: "Cambiar a modo oscuro",
     privacySummary: "Procesamiento local",
-    privacyBody: "Tus documentos permanecen en este navegador. Solo ante un incidente se envían metadatos técnicos sanitizados; nunca PDFs, nombres, códigos TRUSS ni contenido.",
+    privacyBody: "Tus documentos permanecen en este navegador. Solo ante un incidente se envían metadatos técnicos sanitizados; nunca PDFs, archivos TRE, PCL, nombres, códigos TRUSS ni contenido.",
     heroEyebrow: "Herramienta técnica de planos",
     heroTitle: "Separa y actualiza planos PDF.",
     heroBody: "Detecta el código bajo “TRUSS”, organiza versiones y descarga resultados listos para trabajar.",
@@ -42,7 +42,7 @@ const translations = {
     stepFiles: "Archivos",
     stepOperation: "Operación",
     stepResults: "Resultados",
-    workspaceLabel: "Procesamiento de archivos PDF",
+    workspaceLabel: "Procesamiento de archivos PDF, TRE y PCL",
     uploadTitle: "Añade tus planos PDF",
     uploadBody: "Arrástralos aquí o selecciónalos desde tu equipo.",
     selectPdfs: "Seleccionar PDFs o ZIP",
@@ -66,6 +66,19 @@ const translations = {
     pclModeTitle: "Generar paquetes por PCL",
     pclModeBody: "Crea un ZIP por edificio con un PDF por TRUSS y su reporte.",
     pclOutcome: "Resultado: un ZIP por edificio",
+    trePclModeTitle: "Separar archivos TRE por PCL",
+    trePclModeBody: "Organiza los archivos .TRE solicitados en una carpeta por PCL.",
+    trePclOutcome: "Resultado: un ZIP con una carpeta por PCL",
+    trePclPclUploadTitle: "Añade los PCL que indican los archivos TRE",
+    trePclPclUploadBody: "Cada PCL crea una carpeta con los archivos TRE que solicita.",
+    trePclQueueHelp: "Cada PCL se convierte en una carpeta independiente dentro del ZIP.",
+    treUploadTitle: "Añade los archivos .TRE",
+    treUploadBody: "Se incluirá cada archivo cuyo nombre aparezca en un PCL.",
+    selectTres: "Seleccionar TRE",
+    loadedTres: "TRE cargados",
+    addTres: "Añadir TRE",
+    removeAllTres: "Quitar todos",
+    showMoreTres: "Mostrar 100 TRE más",
     pclUploadTitle: "Añade los archivos PCL de los edificios",
     pclUploadBody: "Cada PCL generará su propio paquete ZIP y reporte. También puedes cargar aquí un ZIP completo.",
     selectPcls: "Seleccionar PCL",
@@ -79,6 +92,7 @@ const translations = {
     addPdfsAndPclsToContinue: "Añade PDFs y PCL para continuar",
     processHint: "Selecciona al menos un PDF para habilitar esta acción.",
     pclProcessHint: "Selecciona al menos un PDF y un PCL para habilitar esta acción.",
+    trePclProcessHint: "Selecciona al menos un archivo TRE y un PCL para habilitar esta acción.",
     localStrong: "Tus documentos permanecen en tu equipo.",
     localBody: "Los resultados se generan localmente. Si ocurre un incidente, solo se envían metadatos técnicos sanitizados.",
     progressKicker: "Estado del proceso",
@@ -160,6 +174,7 @@ const translations = {
     processMergeAction: ({ count }) => `Combinar ${count} ${count === 1 ? "PDF" : "PDFs"}`,
     processSplitAction: ({ count }) => `Separar ${count} ${count === 1 ? "PDF" : "PDFs"}`,
     processPclAction: ({ count }) => `Generar ${count} ${count === 1 ? "paquete" : "paquetes"}`,
+    processTrePclAction: ({ count }) => `Separar TRE para ${count} ${count === 1 ? "PCL" : "PCL"}`,
     toastRemovedFile: ({ name }) => `${name} se quitó de la lista.`,
     toastOrderUpdated: "Orden de archivos actualizado.",
     versionSingle: "Archivo único",
@@ -170,6 +185,8 @@ const translations = {
     fileCount: ({ count }) => `${count} ${count === 1 ? "PDF" : "PDFs"}`,
     pclFileCount: ({ count }) => `${count} ${count === 1 ? "PCL" : "PCL"}`,
     pclFileMeta: ({ size, position, total }) => `${size} · PCL ${position} de ${total}`,
+    treFileCount: ({ count }) => `${count} TRE`,
+    treFileMeta: ({ size, position, total }) => `${size} · TRE ${position} de ${total}`,
     filePosition: ({ size, position, total }) => `${size} · posición ${position} de ${total}`,
     fileActions: ({ name }) => `Acciones para ${name}`,
     moveUpLabel: ({ name }) => `Mover ${name} hacia arriba`,
@@ -208,6 +225,9 @@ const translations = {
     },
     toastRemovedPcl: ({ name }) => `${name} se quitó de la lista de PCL.`,
     removedAllPclsToast: "Se quitaron todos los archivos PCL.",
+    treFilesAddedSummary: ({ added, rejected }) => `${added} ${added === 1 ? "TRE añadido" : "TRE añadidos"}${rejected ? ` · ${rejected} ${rejected === 1 ? "archivo rechazado" : "archivos rechazados"} por no ser .TRE` : ""}.`,
+    treFilesRemovedToast: "Se quitaron todos los archivos TRE.",
+    trePclOnlyPcl: "En este apartado selecciona archivos PCL individuales, no archivos ZIP.",
     cancelledError: "El proceso fue cancelado.",
     progressOcr: "Reconociendo TRUSS con OCR",
     progressReading: "Leyendo códigos bajo TRUSS",
@@ -215,6 +235,7 @@ const translations = {
     readingPclDetail: ({ index, total, name }) => `PCL ${index} de ${total} · ${name}`,
     progressIndexingPdfs: "Creando índice de TRUSS",
     progressPlanningPcls: "Preparando paquetes PCL",
+    progressPlanningTrePcls: "Relacionando archivos TRE con los PCL",
     planningPclDetail: ({ index, total, name }) => `Paquete ${index} de ${total} · ${name}`,
     inspectDetail: ({ fileIndex, totalFiles, name, pageNumber, totalPages }) => `Archivo ${fileIndex} de ${totalFiles} · ${name} · página ${pageNumber} de ${totalPages}`,
     progressCreating: "Creando PDFs por código",
@@ -241,12 +262,17 @@ const translations = {
     errorPclTools: "No se pudieron cargar las herramientas PCL. Recarga la página e inténtalo de nuevo.",
     errorPclRead: "No se pudo leer uno de los archivos PCL.",
     errorPackageCreate: "No se pudo crear el paquete PCL.",
+    errorTrePclRead: "No se pudieron leer los archivos PCL para organizar los TRE.",
+    errorTrePclTools: "No se pudo cargar la herramienta ZIP. Recarga la página e inténtalo de nuevo.",
+    errorTrePclZip: "No se pudo crear el ZIP con las carpetas TRE.",
+    errorTrePclIntegrity: "No se pudo validar el resultado TRE/PCL. No se habilitó ninguna descarga.",
     masterUnavailable: "El ZIP maestro es demasiado grande para generarlo con seguridad. Descarga los paquetes individualmente.",
     summaryReviewed: "Hojas revisadas",
     summaryIdentified: "Con código",
     summaryUnidentified: "Sin identificar",
     summaryCreated: "Archivos creados",
     summaryPcls: "PCL procesados",
+    summaryTres: "TRE cargados",
     summaryAvailable: "TRUSS disponibles",
     summaryMissing: "TRUSS faltantes",
     summaryConflicts: "Conflictos",
@@ -269,6 +295,13 @@ const translations = {
     pclStatusNoMatches: "Sin coincidencias",
     pclStatusInvalid: "PCL inválido",
     pclResultMeta: ({ available, missing, conflicts }) => `${available} disponibles · ${missing} faltantes · ${conflicts} conflictos`,
+    trePclResultMeta: ({ available, missing, conflicts }) => `${available} TRE incluidos · ${missing} faltantes · ${conflicts} nombres repetidos`,
+    viewTrePclReport: "Ver contenido y faltantes",
+    trePclCreated: ({ count, available, missing, conflicts }) => `Se prepararon ${count} carpetas PCL con ${available} TRE.${missing ? ` · ${missing} faltantes` : ""}${conflicts ? ` · ${conflicts} nombres repetidos` : ""}`,
+    trePclGlobalSummary: ({ count }) => `<strong>Carpetas preparadas:</strong> ${count}. Descarga un ZIP con una carpeta por PCL.`,
+    downloadTrePclZip: "Descargar ZIP de carpetas TRE",
+    trePclZipCreated: ({ count }) => `Se creó un ZIP con las carpetas de ${count} PCL.`,
+    trePclMasterUnavailable: "El ZIP supera el tamaño seguro para este navegador. Usa Chrome o Edge actualizado para guardarlo directamente en un archivo.",
     pclCreated: ({ count, attention }) => `${count} ${count === 1 ? "paquete preparado" : "paquetes preparados"}.${attention ? ` · ${attention} requieren revisión` : ""}`,
     pclGlobalSummary: ({ unidentified, duplicates }) => `<strong>Índice completado.</strong> ${unidentified} ${unidentified === 1 ? "página quedó" : "páginas quedaron"} sin identificar. ${duplicates} ${duplicates === 1 ? "PDF idéntico fue omitido" : "PDFs idénticos fueron omitidos"}.`,
     filterReviewCount: ({ count }) => `Sin identificar (${count})`,
@@ -293,8 +326,8 @@ const translations = {
     zipFile: "pdfs-por-codigo.zip",
   },
   en: {
-    metaDescription: "Split PDF plans by TRUSS code and merge documents.",
-    documentTitle: "PDF Nicaes - split and merge",
+    metaDescription: "Organize PDF drawings and TRE files using TRUSS codes and PCLs.",
+    documentTitle: "PDF Nicaes - PDF drawings and TRE files",
     brandHome: "PDF Nicaes, home",
     languageSelectorLabel: "Language",
     languageSpanishLabel: "Use Spanish",
@@ -305,7 +338,7 @@ const translations = {
     themeSwitchToLight: "Switch to light mode",
     themeSwitchToDark: "Switch to dark mode",
     privacySummary: "Local processing",
-    privacyBody: "Your documents remain in this browser. Sanitized technical metadata is sent only when an incident occurs; never PDFs, filenames, TRUSS codes, or content.",
+    privacyBody: "Your documents remain in this browser. Sanitized technical metadata is sent only when an incident occurs; never PDFs, TRE files, PCL files, names, TRUSS codes, or content.",
     heroEyebrow: "Technical plan tool",
     heroTitle: "Split and update PDF plans.",
     heroBody: "Detect the code below “TRUSS,” organize versions, and download ready-to-use results.",
@@ -313,7 +346,7 @@ const translations = {
     stepFiles: "Files",
     stepOperation: "Operation",
     stepResults: "Results",
-    workspaceLabel: "PDF file processing",
+    workspaceLabel: "PDF, TRE, and PCL file processing",
     uploadTitle: "Add your PDF plans",
     uploadBody: "Drag them here or select them from your device.",
     selectPdfs: "Select PDFs or ZIP",
@@ -337,6 +370,19 @@ const translations = {
     pclModeTitle: "Generate PCL packages",
     pclModeBody: "Creates one ZIP per building with one PDF per TRUSS and a report.",
     pclOutcome: "Result: one ZIP per building",
+    trePclModeTitle: "Separate TRE files by PCL",
+    trePclModeBody: "Organizes requested .TRE files into one folder per PCL.",
+    trePclOutcome: "Result: one ZIP with a folder per PCL",
+    trePclPclUploadTitle: "Add the PCL files that list the TRE files",
+    trePclPclUploadBody: "Each PCL creates a folder with the TRE files it requests.",
+    trePclQueueHelp: "Each PCL becomes its own folder inside the ZIP.",
+    treUploadTitle: "Add .TRE files",
+    treUploadBody: "Each file whose name appears in a PCL will be included.",
+    selectTres: "Select TRE files",
+    loadedTres: "Uploaded TRE files",
+    addTres: "Add TRE files",
+    removeAllTres: "Remove all",
+    showMoreTres: "Show 100 more TRE files",
     pclUploadTitle: "Add the buildings' PCL files",
     pclUploadBody: "Each PCL will generate its own ZIP package and report. You can also load a complete ZIP here.",
     selectPcls: "Select PCL files",
@@ -350,6 +396,7 @@ const translations = {
     addPdfsAndPclsToContinue: "Add PDFs and PCL files to continue",
     processHint: "Select at least one PDF to enable this action.",
     pclProcessHint: "Select at least one PDF and one PCL file to enable this action.",
+    trePclProcessHint: "Select at least one TRE file and one PCL file to enable this action.",
     localStrong: "Your documents remain on your device.",
     localBody: "Results are generated locally. If an incident occurs, only sanitized technical metadata is sent.",
     progressKicker: "Processing status",
@@ -431,6 +478,7 @@ const translations = {
     processMergeAction: ({ count }) => `Merge ${count} ${count === 1 ? "PDF" : "PDFs"}`,
     processSplitAction: ({ count }) => `Split ${count} ${count === 1 ? "PDF" : "PDFs"}`,
     processPclAction: ({ count }) => `Generate ${count} ${count === 1 ? "package" : "packages"}`,
+    processTrePclAction: ({ count }) => `Organize TRE files for ${count} PCL${count === 1 ? "" : "s"}`,
     toastRemovedFile: ({ name }) => `${name} was removed from the list.`,
     toastOrderUpdated: "File order updated.",
     versionSingle: "Only file",
@@ -441,6 +489,8 @@ const translations = {
     fileCount: ({ count }) => `${count} ${count === 1 ? "PDF" : "PDFs"}`,
     pclFileCount: ({ count }) => `${count} PCL`,
     pclFileMeta: ({ size, position, total }) => `${size} · PCL ${position} of ${total}`,
+    treFileCount: ({ count }) => `${count} TRE files`,
+    treFileMeta: ({ size, position, total }) => `${size} · TRE ${position} of ${total}`,
     filePosition: ({ size, position, total }) => `${size} · position ${position} of ${total}`,
     fileActions: ({ name }) => `Actions for ${name}`,
     moveUpLabel: ({ name }) => `Move ${name} up`,
@@ -479,6 +529,9 @@ const translations = {
     },
     toastRemovedPcl: ({ name }) => `${name} was removed from the PCL list.`,
     removedAllPclsToast: "All PCL files were removed.",
+    treFilesAddedSummary: ({ added, rejected }) => `${added} TRE ${added === 1 ? "file added" : "files added"}${rejected ? ` · ${rejected} ${rejected === 1 ? "file" : "files"} rejected because they are not .TRE` : ""}.`,
+    treFilesRemovedToast: "All TRE files were removed.",
+    trePclOnlyPcl: "Select individual PCL files in this section, not ZIP files.",
     cancelledError: "The process was cancelled.",
     progressOcr: "Recognizing TRUSS with OCR",
     progressReading: "Reading codes below TRUSS",
@@ -486,6 +539,7 @@ const translations = {
     readingPclDetail: ({ index, total, name }) => `PCL ${index} of ${total} · ${name}`,
     progressIndexingPdfs: "Building the TRUSS index",
     progressPlanningPcls: "Preparing PCL packages",
+    progressPlanningTrePcls: "Matching TRE files to PCL requests",
     planningPclDetail: ({ index, total, name }) => `Package ${index} of ${total} · ${name}`,
     inspectDetail: ({ fileIndex, totalFiles, name, pageNumber, totalPages }) => `File ${fileIndex} of ${totalFiles} · ${name} · page ${pageNumber} of ${totalPages}`,
     progressCreating: "Creating PDFs by code",
@@ -512,12 +566,17 @@ const translations = {
     errorPclTools: "The PCL tools could not be loaded. Reload the page and try again.",
     errorPclRead: "One of the PCL files could not be read.",
     errorPackageCreate: "The PCL package could not be created.",
+    errorTrePclRead: "The PCL files could not be read to organize the TRE files.",
+    errorTrePclTools: "The ZIP tool could not be loaded. Reload the page and try again.",
+    errorTrePclZip: "The ZIP containing the TRE folders could not be created.",
+    errorTrePclIntegrity: "The TRE/PCL result could not be validated. Downloads were not enabled.",
     masterUnavailable: "The master ZIP is too large to create safely. Download the packages individually.",
     summaryReviewed: "Pages reviewed",
     summaryIdentified: "With code",
     summaryUnidentified: "Unidentified",
     summaryCreated: "Files created",
     summaryPcls: "PCL files processed",
+    summaryTres: "TRE files loaded",
     summaryAvailable: "Available TRUSS codes",
     summaryMissing: "Missing TRUSS codes",
     summaryConflicts: "Conflicts",
@@ -540,6 +599,13 @@ const translations = {
     pclStatusNoMatches: "No matches",
     pclStatusInvalid: "Invalid PCL",
     pclResultMeta: ({ available, missing, conflicts }) => `${available} available · ${missing} missing · ${conflicts} conflicts`,
+    trePclResultMeta: ({ available, missing, conflicts }) => `${available} TRE included · ${missing} missing · ${conflicts} duplicate names`,
+    viewTrePclReport: "View included files and missing names",
+    trePclCreated: ({ count, available, missing, conflicts }) => `Prepared ${count} PCL folders with ${available} TRE files.${missing ? ` · ${missing} missing` : ""}${conflicts ? ` · ${conflicts} duplicate names` : ""}`,
+    trePclGlobalSummary: ({ count }) => `<strong>Folders prepared:</strong> ${count}. Download one ZIP with a folder for each PCL.`,
+    downloadTrePclZip: "Download TRE folders ZIP",
+    trePclZipCreated: ({ count }) => `A ZIP with folders for ${count} PCL files was created.`,
+    trePclMasterUnavailable: "The ZIP is too large for this browser to create safely. Use an up-to-date Chrome or Edge to save it directly to a file.",
     pclCreated: ({ count, attention }) => `${count} ${count === 1 ? "package prepared" : "packages prepared"}.${attention ? ` · ${attention} need review` : ""}`,
     pclGlobalSummary: ({ unidentified, duplicates }) => `<strong>Index complete.</strong> ${unidentified} unidentified ${unidentified === 1 ? "page" : "pages"}. ${duplicates} identical ${duplicates === 1 ? "PDF was" : "PDFs were"} omitted.`,
     filterReviewCount: ({ count }) => `Unidentified (${count})`,
@@ -604,6 +670,7 @@ const state = {
   language: getStoredLanguage(),
   theme: getInitialTheme(),
   files: [],
+  treFiles: [],
   pclFiles: [],
   results: [],
   summary: null,
@@ -623,6 +690,7 @@ const state = {
   resultFilter: "all",
   visibleResultCount: 30,
   visibleFileCount: 100,
+  visibleTreFileCount: 100,
   visiblePclFileCount: 100,
   cancelRequested: false,
   currentFileIndex: -1,
@@ -660,6 +728,8 @@ const elements = {
   showMoreFiles: document.querySelector("#show-more-files"),
   queueHelp: document.querySelector("#queue-help"),
   pclUploadSection: document.querySelector("#pcl-upload-section"),
+  pclFilesTitle: document.querySelector("#pcl-files-title"),
+  pclUploadBody: document.querySelector("#pcl-upload-body"),
   pclDropzone: document.querySelector("#pcl-dropzone"),
   pickPclFiles: document.querySelector("#pick-pcl-files"),
   pclFileInput: document.querySelector("#pcl-file-input"),
@@ -670,6 +740,17 @@ const elements = {
   addMorePclFiles: document.querySelector("#add-more-pcl-files"),
   pclListMoreRow: document.querySelector("#pcl-list-more-row"),
   showMorePclFiles: document.querySelector("#show-more-pcl-files"),
+  treUploadSection: document.querySelector("#tre-upload-section"),
+  treDropzone: document.querySelector("#tre-dropzone"),
+  pickTreFiles: document.querySelector("#pick-tre-files"),
+  treFileInput: document.querySelector("#tre-file-input"),
+  treFilePanel: document.querySelector("#tre-file-panel"),
+  treFileCount: document.querySelector("#tre-file-count"),
+  treFileList: document.querySelector("#tre-file-list"),
+  clearTreFiles: document.querySelector("#clear-tre-files"),
+  addMoreTreFiles: document.querySelector("#add-more-tre-files"),
+  treListMoreRow: document.querySelector("#tre-list-more-row"),
+  showMoreTreFiles: document.querySelector("#show-more-tre-files"),
   workspace: document.querySelector("#workspace"),
   modeInputs: document.querySelectorAll('input[name="mode"]'),
   priorityNote: document.querySelector("#priority-note"),
@@ -959,6 +1040,14 @@ function countLabel(count, singular, plural = `${singular}s`) {
 
 function modeCopy() {
   const count = state.files.length;
+  if (state.mode === "tre-pcl") {
+    return {
+      short: t("trePclModeTitle"),
+      action: state.treFiles.length && state.pclFiles.length
+        ? t("processTrePclAction", { count: state.pclFiles.length })
+        : t("trePclProcessHint"),
+    };
+  }
   if (state.mode === "pcl") {
     return {
       short: t("pclModeTitle"),
@@ -986,7 +1075,7 @@ function setStepState(element, value) {
 }
 
 function renderWorkflow() {
-  const hasFiles = state.files.length > 0;
+  const hasFiles = state.files.length > 0 || state.treFiles.length > 0 || state.pclFiles.length > 0;
   const hasResults = state.results.length > 0;
   const choosingOperation = !hasResults && (hasFiles || state.operationSelected);
   setStepState(elements.stepFiles, hasFiles ? "complete" : choosingOperation ? "pending" : "current");
@@ -1005,7 +1094,10 @@ function isLocked() {
 }
 
 function updateControls() {
-  const hasRequiredFiles = state.files.length > 0 && (state.mode !== "pcl" || state.pclFiles.length > 0);
+  elements.uploadCard.classList.toggle("is-tre-pcl", state.mode === "tre-pcl");
+  const hasRequiredFiles = state.mode === "tre-pcl"
+    ? state.treFiles.length > 0 && state.pclFiles.length > 0
+    : state.files.length > 0 && (state.mode !== "pcl" || state.pclFiles.length > 0);
   const locked = isLocked();
   const disabled = locked || !hasRequiredFiles;
   const copy = modeCopy();
@@ -1014,13 +1106,15 @@ function updateControls() {
   elements.processButton.textContent = copy.action;
   elements.mobileProcessButton.textContent = copy.action;
   elements.mobileModeLabel.textContent = copy.short;
-  elements.processHint.textContent = t(state.mode === "pcl" ? "pclProcessHint" : "processHint");
+  elements.processHint.textContent = t(state.mode === "tre-pcl"
+    ? "trePclProcessHint"
+    : state.mode === "pcl" ? "pclProcessHint" : "processHint");
   elements.processHint.hidden = hasRequiredFiles;
   elements.mobileActionBar.hidden = !hasRequiredFiles || locked || state.results.length > 0;
   elements.clearFiles.disabled = locked || state.files.length === 0;
   elements.pickFiles.disabled = locked;
   elements.loadExample.disabled = locked;
-  elements.loadExample.hidden = state.files.length > 0 || state.pclFiles.length > 0;
+  elements.loadExample.hidden = state.mode === "tre-pcl" || state.files.length > 0 || state.pclFiles.length > 0 || state.treFiles.length > 0;
   elements.loadExample.textContent = t(state.loadingExample ? "loadingExample" : "loadExample");
   elements.addMoreFiles.disabled = locked;
   elements.resultsAddMore.disabled = locked;
@@ -1030,6 +1124,10 @@ function updateControls() {
   elements.addMorePclFiles.disabled = locked;
   elements.showMorePclFiles.disabled = locked;
   elements.clearPclFiles.disabled = locked || state.pclFiles.length === 0;
+  elements.pickTreFiles.disabled = locked;
+  elements.addMoreTreFiles.disabled = locked;
+  elements.clearTreFiles.disabled = locked || state.treFiles.length === 0;
+  elements.showMoreTreFiles.disabled = locked;
   elements.modeInputs.forEach((input) => { input.disabled = locked; });
   elements.cancelButton.hidden = !state.busy;
   elements.fileList.querySelectorAll("button").forEach((button) => {
@@ -1037,6 +1135,9 @@ function updateControls() {
     button.disabled = locked || blockedByPosition;
   });
   elements.pclFileList.querySelectorAll("button").forEach((button) => {
+    button.disabled = locked;
+  });
+  elements.treFileList.querySelectorAll("button").forEach((button) => {
     button.disabled = locked;
   });
   elements.resultsList.querySelectorAll(".download-button").forEach((button) => {
@@ -1050,12 +1151,23 @@ function updateControls() {
     input.disabled = reviewPreviewBlocked;
   });
   elements.fileList.querySelectorAll(".file-item").forEach((item) => {
-    item.draggable = !locked && state.mode !== "pcl";
+    item.draggable = !locked && state.mode !== "pcl" && state.mode !== "tre-pcl";
   });
   elements.workspace.setAttribute("aria-busy", String(
     state.busy || state.addingFiles || state.loadingExample,
   ));
-  elements.pclUploadSection.hidden = state.mode !== "pcl";
+  elements.dropzone.hidden = state.mode === "tre-pcl";
+  elements.filePanel.hidden = state.mode === "tre-pcl" || state.files.length === 0;
+  elements.pclUploadSection.hidden = state.mode !== "pcl" && state.mode !== "tre-pcl";
+  elements.pclFilesTitle.textContent = t(state.mode === "tre-pcl" ? "trePclPclUploadTitle" : "pclUploadTitle");
+  elements.pclUploadBody.textContent = t(state.mode === "tre-pcl" ? "trePclPclUploadBody" : "pclUploadBody");
+  elements.pclFileInput.accept = state.mode === "tre-pcl"
+    ? ".pcl,application/octet-stream,text/plain"
+    : ".pcl,application/octet-stream,text/plain,.zip,application/zip";
+  elements.pclFileCount.closest(".pcl-file-panel").querySelector(".queue-help").textContent = t(
+    state.mode === "tre-pcl" ? "trePclQueueHelp" : "pclQueueHelp",
+  );
+  elements.treUploadSection.hidden = state.mode !== "tre-pcl";
   renderWorkflow();
 }
 
@@ -1074,7 +1186,7 @@ function clearOutput() {
   state.resultQuery = "";
   state.resultFilter = "all";
   state.visibleResultCount = 30;
-  if (!state.busy) state.status = state.files.length ? "ready" : "idle";
+  if (!state.busy) state.status = state.files.length || state.treFiles.length || state.pclFiles.length ? "ready" : "idle";
   elements.resultsCard.hidden = true;
   elements.reviewCard.hidden = true;
   elements.reviewList.replaceChildren();
@@ -1139,29 +1251,29 @@ function renderPriorityNote() {
 }
 
 function renderFiles() {
-  elements.filePanel.hidden = state.files.length === 0;
+  elements.filePanel.hidden = state.mode === "tre-pcl" || state.files.length === 0;
   elements.fileCount.textContent = t("fileCount", { count: state.files.length });
   elements.fileList.replaceChildren();
-  elements.queueHelp.hidden = state.mode === "pcl";
+  elements.queueHelp.hidden = state.mode === "pcl" || state.mode === "tre-pcl";
 
   state.files.slice(0, state.visibleFileCount).forEach((file, index) => {
     const issue = state.fileIssues.get(fileKey(file));
     const item = document.createElement("li");
     item.className = `file-item${issue ? " is-error" : ""}`;
     item.dataset.fileIndex = String(index);
-    item.draggable = !isLocked() && state.mode !== "pcl";
+    item.draggable = !isLocked() && state.mode !== "pcl" && state.mode !== "tre-pcl";
     item.innerHTML = `
       <span class="file-icon" aria-hidden="true">PDF</span>
       <span class="file-info">
         <span class="file-name" title="${escapeAttribute(file.name)}">${escapeHtml(file.name)}</span>
         <span class="file-meta">
           <span>${t("filePosition", { size: formatBytes(file.size), position: index + 1, total: state.files.length })}</span>
-          ${state.mode === "pcl" ? "" : `<span class="version-badge${index === state.files.length - 1 ? " is-priority" : ""}">${versionLabel(index)}</span>`}
+          ${state.mode === "pcl" || state.mode === "tre-pcl" ? "" : `<span class="version-badge${index === state.files.length - 1 ? " is-priority" : ""}">${versionLabel(index)}</span>`}
         </span>
       </span>
       <span class="file-actions" role="group" aria-label="${escapeAttribute(t("fileActions", { name: file.name }))}">
-        ${state.mode === "pcl" ? "" : `<button class="file-control file-move-up" type="button" aria-label="${escapeAttribute(t("moveUpLabel", { name: file.name }))}" ${index === 0 ? 'data-position-disabled="true" disabled' : ""}>${t("moveUp")}</button>`}
-        ${state.mode === "pcl" ? "" : `<button class="file-control file-move-down" type="button" aria-label="${escapeAttribute(t("moveDownLabel", { name: file.name }))}" ${index === state.files.length - 1 ? 'data-position-disabled="true" disabled' : ""}>${t("moveDown")}</button>`}
+        ${state.mode === "pcl" || state.mode === "tre-pcl" ? "" : `<button class="file-control file-move-up" type="button" aria-label="${escapeAttribute(t("moveUpLabel", { name: file.name }))}" ${index === 0 ? 'data-position-disabled="true" disabled' : ""}>${t("moveUp")}</button>`}
+        ${state.mode === "pcl" || state.mode === "tre-pcl" ? "" : `<button class="file-control file-move-down" type="button" aria-label="${escapeAttribute(t("moveDownLabel", { name: file.name }))}" ${index === state.files.length - 1 ? 'data-position-disabled="true" disabled' : ""}>${t("moveDown")}</button>`}
         <button class="file-control file-remove" type="button" aria-label="${escapeAttribute(t("removeLabel", { name: file.name }))}">${t("remove")}</button>
       </span>
       ${issue ? `<div class="file-issue"><span>${escapeHtml(t(issue))}</span><button class="secondary-button file-replace" type="button">${t("replaceFile")}</button></div>` : ""}
@@ -1448,11 +1560,62 @@ function renderPclFiles() {
   updateControls();
 }
 
+function removeTreFile(index) {
+  if (isLocked()) return;
+  const [removed] = state.treFiles.splice(index, 1);
+  clearOutput();
+  renderTreFiles();
+  if (removed) setToast("toastRemovedFile", { name: removed.name });
+}
+
+function renderTreFiles() {
+  elements.treFilePanel.hidden = state.treFiles.length === 0;
+  elements.treFileCount.textContent = t("treFileCount", { count: state.treFiles.length });
+  elements.treFileList.replaceChildren();
+  state.treFiles.slice(0, state.visibleTreFileCount).forEach((file, index) => {
+    const item = document.createElement("li");
+    item.className = "file-item tre-file-item";
+    item.innerHTML = `
+      <span class="file-icon" aria-hidden="true">TRE</span>
+      <span class="file-info">
+        <span class="file-name" title="${escapeAttribute(file.name)}">${escapeHtml(file.name)}</span>
+        <span class="file-meta">${t("treFileMeta", { size: formatBytes(file.size), position: index + 1, total: state.treFiles.length })}</span>
+      </span>
+      <span class="file-actions" role="group" aria-label="${escapeAttribute(t("fileActions", { name: file.name }))}">
+        <button class="file-control file-remove" type="button" aria-label="${escapeAttribute(t("removeLabel", { name: file.name }))}">${t("remove")}</button>
+      </span>
+    `;
+    item.querySelector(".file-remove").addEventListener("click", () => removeTreFile(index));
+    elements.treFileList.append(item);
+  });
+  elements.treListMoreRow.hidden = state.visibleTreFileCount >= state.treFiles.length;
+  updateControls();
+}
+
+function addTreFiles(fileList) {
+  if (isLocked()) return;
+  const selected = Array.from(fileList);
+  const incoming = selected.filter((file) => file.name.toLowerCase().endsWith(".tre"));
+  const rejected = selected.length - incoming.length;
+  if (!incoming.length) {
+    setToast("treFilesAddedSummary", { added: 0, rejected }, true);
+    return;
+  }
+  state.treFiles.push(...incoming);
+  clearOutput();
+  renderTreFiles();
+  setToast("treFilesAddedSummary", { added: incoming.length, rejected }, rejected > 0);
+}
+
 async function addPclFiles(fileList) {
   if (isLocked()) return;
   const selected = Array.from(fileList);
   const archives = selected.filter(isZipFile);
   if (archives.length) {
+    if (state.mode === "tre-pcl") {
+      setToast("trePclOnlyPcl", {}, true);
+      return;
+    }
     await addFiles(archives);
     const directPcls = selected.filter((file) => !isZipFile(file));
     if (directPcls.length) await addPclFiles(directPcls);
@@ -2268,6 +2431,121 @@ async function downloadPclPackage(result) {
   }
 }
 
+async function buildTrePclOutcome() {
+  if (!window.PclDomain || !window.TrePclDomain || !window.ZipWriter) {
+    const error = new Error("TRE/PCL tools unavailable");
+    error.diagnosticCode = "TRE_PCL_TOOLS_UNAVAILABLE";
+    throw error;
+  }
+  const packageNames = window.PclDomain.assignPackageNames(state.pclFiles.map((file) => file.name));
+  const requests = [];
+  diagnosticTracker?.enterPhase("reading_pcl", diagnosticCounts());
+  for (let index = 0; index < state.pclFiles.length; index += 1) {
+    checkCancelled();
+    const file = state.pclFiles[index];
+    setProgress("progressReadingPcls", ((index + 1) / state.pclFiles.length) * 35, "readingPclDetail", {
+      index: index + 1,
+      total: state.pclFiles.length,
+      name: file.name,
+    });
+    requests.push({ file, parsed: window.PclDomain.parsePcl(await file.text()) });
+  }
+  checkCancelled();
+  diagnosticTracker?.enterPhase("planning_packages", diagnosticCounts());
+  state.results = window.TrePclDomain.planPackages(requests, state.treFiles, packageNames);
+  state.results.forEach((result, index) => {
+    checkCancelled();
+    setProgress("progressPlanningTrePcls", 35 + ((index + 1) / state.results.length) * 55);
+    result.reportText = window.TrePclDomain.buildReport(result, state.language);
+  });
+  const available = state.results.reduce((total, result) => total + result.available.length, 0);
+  const missing = state.results.reduce((total, result) => total + result.missing.length, 0);
+  const conflicts = state.results.reduce((total, result) => total + result.conflicts.length, 0);
+  const estimatedOutputBytes = state.results.reduce((total, result) => total
+    + result.available.reduce((fileTotal, item) => fileTotal + item.file.size, 0)
+    + result.available.length * 512
+    + result.reportText.length * 2, 0);
+  const canSaveDirect = window.isSecureContext && typeof window.showSaveFilePicker === "function";
+  state.summary = {
+    totalPages: 0,
+    identifiedPages: 0,
+    unidentifiedPages: 0,
+    pclCount: state.results.length,
+    treCount: state.treFiles.length,
+    available,
+    missing,
+    conflicts,
+    resultCount: state.results.length,
+    masterAvailable: estimatedOutputBytes <= MASTER_ZIP_MEMORY_LIMIT || canSaveDirect,
+  };
+}
+
+async function buildTrePclMaster(sink) {
+  const archive = new window.ZipWriter.Archive(sink);
+  try {
+    for (const result of state.results) {
+      checkCancelled();
+      for (const item of result.available) {
+        await archive.add(`${result.packageName}/${item.code}.tre`, item.file);
+      }
+      await archive.add(`${result.packageName}/reporte.txt`, `\uFEFF${result.reportText}\n`);
+    }
+    const expectedEntries = state.results.reduce((total, result) => total + result.available.length + 1, 0);
+    if (archive.entries.length !== expectedEntries) throw integrityError("TRE_PCL_ZIP_INTEGRITY_FAILED");
+    return await archive.close();
+  } catch (error) {
+    await archive.abort().catch(() => {});
+    throw error;
+  }
+}
+
+async function downloadTrePclMaster() {
+  if (isLocked() || !state.results.length) return;
+  if (!state.summary?.masterAvailable) {
+    setToast("trePclMasterUnavailable", {}, true);
+    return;
+  }
+  state.creatingZip = true;
+  updateControls();
+  renderResults();
+  let downloadStarted = false;
+  let direct = false;
+  try {
+    const estimatedBytes = state.treFiles.reduce((total, file) => total + file.size, 0)
+      + state.results.reduce((total, result) => total + result.available.length * 512, 0);
+    let sink = window.ZipWriter.createBlobSink();
+    if (estimatedBytes > LARGE_PACKAGE_DIRECT_THRESHOLD && window.isSecureContext
+      && typeof window.showSaveFilePicker === "function") {
+      const handle = await window.showSaveFilePicker({
+        suggestedName: "paquetes-tre-pcl.zip",
+        types: [{ description: "ZIP", accept: { "application/zip": [".zip"] } }],
+      });
+      sink = await window.ZipWriter.createFileSink(handle);
+      direct = true;
+    }
+    diagnosticTracker?.startDownload("master_zip");
+    downloadStarted = true;
+    renderDiagnostics();
+    const blob = await buildTrePclMaster(sink);
+    if (!direct && blob) downloadBlob(blob, "paquetes-tre-pcl.zip");
+    finishTrackedDownload();
+    setToast("trePclZipCreated", { count: state.results.length });
+  } catch (error) {
+    if (error?.name === "AbortError" && !downloadStarted) return;
+    console.error(error);
+    if (!downloadStarted) {
+      diagnosticTracker?.startDownload("master_zip");
+      downloadStarted = true;
+    }
+    await failTrackedDownload(error.diagnosticCode || "TRE_PCL_ZIP_FAILED");
+    setToast("errorTrePclZip", {}, true);
+  } finally {
+    state.creatingZip = false;
+    updateControls();
+    renderResults();
+  }
+}
+
 function buildGeneralReport(results, language) {
   const spanish = language !== "en";
   const lines = [
@@ -2376,6 +2654,8 @@ function diagnosticErrorCode(friendlyMessageKey, error) {
   return {
     errorPdfTools: "PDF_TOOLS_UNAVAILABLE",
     errorPclTools: "PCL_TOOLS_UNAVAILABLE",
+    errorTrePclTools: "TRE_PCL_TOOLS_UNAVAILABLE",
+    errorTrePclRead: "TRE_PCL_READ_FAILED",
     errorPassword: "PDF_PASSWORD_PROTECTED",
     errorInvalidPdf: "PDF_INVALID",
     errorEmptyPdf: "PDF_EMPTY",
@@ -2406,6 +2686,12 @@ function diagnosticCounts() {
     keptUnidentifiedCount: state.keptUnidentifiedCount,
   };
   if (state.mode === "pcl") {
+    counts.availableCount = summary.available || 0;
+    counts.missingCount = summary.missing || 0;
+    counts.conflictCount = summary.conflicts || 0;
+  }
+  if (state.mode === "tre-pcl") {
+    counts.treCount = state.treFiles.length;
     counts.availableCount = summary.available || 0;
     counts.missingCount = summary.missing || 0;
     counts.conflictCount = summary.conflicts || 0;
@@ -2450,7 +2736,7 @@ async function validateResultsIntegrity(mode) {
   if (summary.totalPages !== state.diagnosticPagesInspected) {
     throw integrityError("PAGE_ACCOUNTING_FAILED");
   }
-  if (state.files.length !== state.diagnosticProcessedPdfCount) {
+  if (mode !== "tre-pcl" && state.files.length !== state.diagnosticProcessedPdfCount) {
     throw integrityError("SOURCE_ACCOUNTING_FAILED");
   }
 
@@ -2469,6 +2755,26 @@ async function validateResultsIntegrity(mode) {
       throw integrityError("MERGE_INTEGRITY_FAILED");
     }
     await validatePdfArtifact(merged);
+    return;
+  }
+
+  if (mode === "tre-pcl") {
+    if (state.results.length !== state.pclFiles.length || summary.pclCount !== state.pclFiles.length) {
+      throw integrityError("TRE_PCL_INTEGRITY_FAILED");
+    }
+    for (const result of state.results) {
+      const requested = result.parsed.codes || [];
+      const partition = [...result.available.map((item) => item.code), ...result.missing, ...result.conflicts.map((item) => item.code)];
+      if (partition.length !== requested.length || new Set(partition).size !== requested.length
+        || requested.some((code) => !partition.includes(code))) {
+        throw integrityError("TRE_PCL_INTEGRITY_FAILED");
+      }
+      for (const item of result.available) {
+        if (!state.treFiles.includes(item.file) || window.TrePclDomain.canonicalName(item.file.name) !== item.code) {
+          throw integrityError("TRE_PCL_SOURCE_INTEGRITY_FAILED");
+        }
+      }
+    }
     return;
   }
 
@@ -2519,6 +2825,10 @@ async function downloadResult(result) {
 }
 
 async function downloadResultsAsZip() {
+  if (state.mode === "tre-pcl") {
+    await downloadTrePclMaster();
+    return;
+  }
   if (state.mode === "pcl") {
     await downloadPclMaster();
     return;
@@ -2572,7 +2882,9 @@ function filteredResults() {
   return state.results.filter((result) => {
     const needsReview = state.mode === "pcl"
       ? result.plan.status !== "satisfactory"
-      : result.label === UNIDENTIFIED_LABEL;
+      : state.mode === "tre-pcl"
+        ? result.status !== "satisfactory"
+        : result.label === UNIDENTIFIED_LABEL;
     const matchesFilter = state.resultFilter !== "review" || needsReview;
     const matchesQuery = !query
       || resultDisplayLabel(result).toLocaleUpperCase(state.language).includes(query)
@@ -2583,6 +2895,7 @@ function filteredResults() {
 
 function resultFileName(result) {
   if (result.nameKind === "pcl-package") return `${result.packageName}.zip`;
+  if (result.nameKind === "tre-pcl-folder") return result.packageName;
   if (result.nameKind === "unidentified") return t("unidentifiedFile");
   if (result.nameKind === "merged") return t("mergedFile");
   return `${sanitizeFileName(result.label)}-S.pdf`;
@@ -2590,6 +2903,7 @@ function resultFileName(result) {
 
 function resultDisplayLabel(result) {
   if (result.nameKind === "pcl-package") return result.packageName;
+  if (result.nameKind === "tre-pcl-folder") return result.packageName;
   if (result.nameKind === "unidentified") return t("unidentifiedDisplay");
   if (result.nameKind === "merged") return t("mergedResultLabel");
   return result.label;
@@ -2605,7 +2919,15 @@ function renderSummary() {
       ["summaryMissing", state.summary.missing],
       ["summaryConflicts", state.summary.conflicts],
     ]
-    : [
+    : state.mode === "tre-pcl"
+      ? [
+        ["summaryPcls", state.summary.pclCount],
+        ["summaryTres", state.summary.treCount],
+        ["summaryAvailable", state.summary.available],
+        ["summaryMissing", state.summary.missing],
+        ["summaryConflicts", state.summary.conflicts],
+      ]
+      : [
       ["summaryReviewed", state.summary.totalPages],
       ["summaryIdentified", state.summary.identifiedPages],
       ["summaryUnidentified", state.summary.unidentifiedPages],
@@ -2626,7 +2948,15 @@ function renderOperationSummary() {
   elements.operationSummary.hidden = !(
     (state.mode === "merge" && details)
     || (state.mode === "pcl" && pclDetails)
+    || (state.mode === "tre-pcl" && state.summary)
   );
+  if (state.mode === "tre-pcl" && state.summary) {
+    elements.operationSummary.innerHTML = t("trePclGlobalSummary", { count: state.summary.pclCount });
+    if (!state.summary.masterAvailable) {
+      elements.operationSummary.append(document.createElement("br"), document.createTextNode(t("trePclMasterUnavailable")));
+    }
+    return;
+  }
   if (state.mode === "pcl" && pclDetails) {
     elements.operationSummary.innerHTML = t("pclGlobalSummary", {
       unidentified: pclDetails.unidentifiedPages,
@@ -2646,6 +2976,21 @@ function renderOperationSummary() {
 }
 
 function renderResultRow(result) {
+  if (result.nameKind === "tre-pcl-folder") {
+    const requiresReview = result.status !== "satisfactory";
+    const item = document.createElement("li");
+    item.className = `result-item${requiresReview ? " is-warning" : ""}${result.status === "invalid" ? " is-invalid" : ""}`;
+    item.innerHTML = `
+      <span class="result-icon" aria-hidden="true">TRE</span>
+      <div class="result-info">
+        <div class="result-name" title="${escapeAttribute(result.packageName)}">${escapeHtml(result.packageName)}/</div>
+        <div class="result-meta">${t("trePclResultMeta", { available: result.available.length, missing: result.missing.length, conflicts: result.conflicts.length })}</div>
+        <span class="result-status is-${result.status.replace("_", "-")}">${t(packageStatusKey(result.status))}</span>
+        <details class="pcl-report-details"><summary>${t("viewTrePclReport")}</summary><pre>${escapeHtml(result.reportText)}</pre></details>
+      </div>
+    `;
+    return item;
+  }
   if (result.nameKind === "pcl-package") {
     const requiresReview = result.plan.status !== "satisfactory";
     const invalid = result.plan.status === "invalid";
@@ -2998,22 +3343,27 @@ async function beginResultReview(session, context) {
 function renderResults() {
   const hasResults = state.results.length > 0;
   elements.resultsCard.hidden = !hasResults;
-  const showMaster = state.mode === "pcl" && hasResults;
+  const showMaster = (state.mode === "pcl" || state.mode === "tre-pcl") && hasResults;
   elements.downloadAll.hidden = !(showMaster || (state.mode === "split" && state.results.length >= 2));
-  elements.downloadAll.disabled = isLocked() || (showMaster && !state.pclGlobalSummary?.masterAvailable);
+  elements.downloadAll.disabled = isLocked()
+    || (state.mode === "pcl" && showMaster && !state.pclGlobalSummary?.masterAvailable)
+    || (state.mode === "tre-pcl" && showMaster && !state.summary?.masterAvailable);
   elements.downloadAll.textContent = state.creatingZip
     ? t("creatingZip")
-    : t(showMaster ? "downloadMaster" : "downloadZip");
-  elements.resultsTools.hidden = !(state.mode === "split" || state.mode === "pcl") || !hasResults;
+    : t(state.mode === "tre-pcl" ? "downloadTrePclZip" : showMaster ? "downloadMaster" : "downloadZip");
+  elements.resultsTools.hidden = !(state.mode === "split" || state.mode === "pcl" || state.mode === "tre-pcl") || !hasResults;
+  elements.resultsAddMore.hidden = state.mode === "tre-pcl";
   elements.resultsList.replaceChildren();
   renderSummary();
   renderOperationSummary();
 
   const reviewCount = state.results.filter((result) => state.mode === "pcl"
     ? result.plan.status !== "satisfactory"
-    : result.label === UNIDENTIFIED_LABEL).length;
+    : state.mode === "tre-pcl"
+      ? result.status !== "satisfactory"
+      : result.label === UNIDENTIFIED_LABEL).length;
   elements.filterReview.disabled = reviewCount === 0;
-  elements.filterReview.textContent = state.mode === "pcl"
+  elements.filterReview.textContent = state.mode === "pcl" || state.mode === "tre-pcl"
     ? `${t("filterPclReview")} (${reviewCount})`
     : t("filterReviewCount", { count: reviewCount });
   elements.filterAll.classList.toggle("is-active", state.resultFilter === "all");
@@ -3065,7 +3415,9 @@ async function finishSuccessfulProcessing(mode) {
   const unidentifiedPages = state.summary?.unidentifiedPages || 0;
   const requiresAttention = mode === "pcl"
     ? state.results.some((result) => result.plan.status !== "satisfactory")
-    : unidentifiedPages > 0;
+    : mode === "tre-pcl"
+      ? state.results.some((result) => result.status !== "satisfactory")
+      : unidentifiedPages > 0;
   diagnosticTracker?.complete(requiresAttention ? "completed_with_review" : "completed", diagnosticCounts());
   state.status = "success";
   state.reviewSession = null;
@@ -3080,12 +3432,17 @@ async function finishSuccessfulProcessing(mode) {
     reviewCount: unidentifiedPages,
   });
   elements.cancelButton.hidden = true;
-  setToast(mode === "pcl" ? "pclCreated" : mode === "split" ? "splitCreated" : "mergeCreated", {
+  setToast(mode === "pcl" ? "pclCreated" : mode === "tre-pcl" ? "trePclCreated" : mode === "split" ? "splitCreated" : "mergeCreated", {
     count: state.results.length,
+    available: state.summary?.available || 0,
+    missing: state.summary?.missing || 0,
+    conflicts: state.summary?.conflicts || 0,
     reviewCount: unidentifiedPages,
     attention: mode === "pcl"
       ? state.results.filter((result) => result.plan.status !== "satisfactory").length
-      : 0,
+      : mode === "tre-pcl"
+        ? state.results.filter((result) => result.status !== "satisfactory").length
+        : 0,
   }, requiresAttention);
   elements.resultsTitle.focus({ preventScroll: true });
   elements.resultsCard.scrollIntoView({
@@ -3168,7 +3525,10 @@ async function confirmCurrentReview() {
 }
 
 async function process(mode) {
-  if (isLocked() || state.files.length === 0 || (mode === "pcl" && state.pclFiles.length === 0)) return;
+  const hasInputs = mode === "tre-pcl"
+    ? state.treFiles.length > 0 && state.pclFiles.length > 0
+    : state.files.length > 0 && (mode !== "pcl" || state.pclFiles.length > 0);
+  if (isLocked() || !hasInputs) return;
   state.mode = mode;
   state.diagnosticPagesInspected = 0;
   state.diagnosticOcrPages = 0;
@@ -3181,11 +3541,12 @@ async function process(mode) {
   state.keptUnidentifiedCount = 0;
   diagnosticTracker?.start({
     mode,
-    pdfCount: state.files.length,
-    pclCount: mode === "pcl" ? state.pclFiles.length : 0,
+    pdfCount: mode === "tre-pcl" ? 0 : state.files.length,
+    pclCount: mode === "pcl" || mode === "tre-pcl" ? state.pclFiles.length : 0,
+    treCount: mode === "tre-pcl" ? state.treFiles.length : 0,
   });
   renderDiagnostics();
-  if (!window.pdfjsLib || !window.PDFLib) {
+  if (mode !== "tre-pcl" && (!window.pdfjsLib || !window.PDFLib)) {
     state.status = "error";
     setProgressError("errorPdfTools");
     const incident = diagnosticTracker?.recordIncident("PDF_TOOLS_UNAVAILABLE", diagnosticCounts());
@@ -3195,10 +3556,12 @@ async function process(mode) {
     elements.progressLabel.focus();
     return;
   }
-  if (mode === "pcl" && (!window.PclDomain || !window.ZipWriter)) {
+  if ((mode === "pcl" && (!window.PclDomain || !window.ZipWriter))
+    || (mode === "tre-pcl" && (!window.PclDomain || !window.TrePclDomain || !window.ZipWriter))) {
     state.status = "error";
-    setProgressError("errorPclTools");
-    const incident = diagnosticTracker?.recordIncident("PCL_TOOLS_UNAVAILABLE", diagnosticCounts());
+    const messageKey = mode === "tre-pcl" ? "errorTrePclTools" : "errorPclTools";
+    setProgressError(messageKey);
+    const incident = diagnosticTracker?.recordIncident(mode === "tre-pcl" ? "TRE_PCL_TOOLS_UNAVAILABLE" : "PCL_TOOLS_UNAVAILABLE", diagnosticCounts());
     renderDiagnostics();
     await incident;
     renderDiagnostics();
@@ -3223,7 +3586,10 @@ async function process(mode) {
   updateControls();
   elements.cancelButton.disabled = false;
   elements.cancelButton.textContent = t("cancel");
-  setProgress("progressPreparing", 0, "queuedFiles", { count: state.files.length });
+  const inputCount = mode === "tre-pcl"
+    ? state.treFiles.length + state.pclFiles.length
+    : state.files.length + (mode === "pcl" ? state.pclFiles.length : 0);
+  setProgress("progressPreparing", 0, "queuedFiles", { count: inputCount });
 
   try {
     const ensureOcrWorker = async () => {
@@ -3335,6 +3701,11 @@ async function process(mode) {
     };
     let reviewSession = null;
     let reviewContext = null;
+    if (mode === "tre-pcl") {
+      await buildTrePclOutcome();
+      await finishSuccessfulProcessing(mode);
+      return;
+    }
     if (mode === "pcl") {
       const pclOutcome = await processPclMode(ensureOcrWorker);
       state.results = pclOutcome.results;
@@ -3418,9 +3789,15 @@ async function process(mode) {
       state.status = "error";
       const friendlyMessageKey = error?.diagnosticCode === "REVIEW_PREVIEW_FAILED"
         ? "errorReviewPreview"
-        : mode === "pcl" && String(error?.message || "").includes("PCL tools")
-          ? "errorPclTools"
-          : friendlyPdfError(error);
+        : mode === "tre-pcl"
+          ? error?.diagnosticCode === "TRE_PCL_TOOLS_UNAVAILABLE"
+            ? "errorTrePclTools"
+            : String(error?.diagnosticCode || "").startsWith("TRE_PCL_")
+              ? "errorTrePclIntegrity"
+              : "errorTrePclRead"
+          : mode === "pcl" && String(error?.message || "").includes("PCL tools")
+            ? "errorPclTools"
+            : friendlyPdfError(error);
       const affectedFile = state.files[state.currentFileIndex];
       if (affectedFile) state.fileIssues.set(fileKey(affectedFile), friendlyMessageKey);
       renderFiles();
@@ -3460,6 +3837,11 @@ elements.pclFileInput.addEventListener("change", (event) => {
   event.target.value = "";
 });
 
+elements.treFileInput.addEventListener("change", (event) => {
+  addTreFiles(event.target.files);
+  event.target.value = "";
+});
+
 for (const eventName of ["dragenter", "dragover"]) {
   elements.dropzone.addEventListener(eventName, (event) => {
     event.preventDefault();
@@ -3495,9 +3877,27 @@ for (const eventName of ["dragleave", "drop"]) {
   });
 }
 elements.pclDropzone.addEventListener("drop", (event) => addPclFiles(event.dataTransfer.files));
+for (const eventName of ["dragenter", "dragover"]) {
+  elements.treDropzone.addEventListener(eventName, (event) => {
+    event.preventDefault();
+    elements.treDropzone.classList.add("is-dragging");
+  });
+}
+for (const eventName of ["dragleave", "drop"]) {
+  elements.treDropzone.addEventListener(eventName, (event) => {
+    event.preventDefault();
+    elements.treDropzone.classList.remove("is-dragging");
+  });
+}
+elements.treDropzone.addEventListener("drop", (event) => addTreFiles(event.dataTransfer.files));
 for (const button of [elements.pickPclFiles, elements.addMorePclFiles]) {
   button.addEventListener("click", () => {
     if (!isLocked()) elements.pclFileInput.click();
+  });
+}
+for (const button of [elements.pickTreFiles, elements.addMoreTreFiles]) {
+  button.addEventListener("click", () => {
+    if (!isLocked()) elements.treFileInput.click();
   });
 }
 
@@ -3518,6 +3918,14 @@ elements.clearPclFiles.addEventListener("click", () => {
   setToast("removedAllPclsToast");
 });
 
+elements.clearTreFiles.addEventListener("click", () => {
+  if (isLocked()) return;
+  state.treFiles = [];
+  clearOutput();
+  renderTreFiles();
+  setToast("treFilesRemovedToast");
+});
+
 elements.showMoreFiles.addEventListener("click", () => {
   if (isLocked()) return;
   state.visibleFileCount += 100;
@@ -3532,6 +3940,13 @@ elements.showMorePclFiles.addEventListener("click", () => {
   elements.showMorePclFiles.focus();
 });
 
+elements.showMoreTreFiles.addEventListener("click", () => {
+  if (isLocked()) return;
+  state.visibleTreFileCount += 100;
+  renderTreFiles();
+  elements.showMoreTreFiles.focus();
+});
+
 elements.modeInputs.forEach((input) => {
   input.addEventListener("change", () => {
     if (!input.checked || isLocked()) return;
@@ -3540,6 +3955,7 @@ elements.modeInputs.forEach((input) => {
     clearOutput();
     renderFiles();
     renderPclFiles();
+    renderTreFiles();
   });
 });
 
@@ -3617,14 +4033,17 @@ elements.loadMore.addEventListener("click", () => {
 elements.startOver.addEventListener("click", () => {
   if (isLocked()) return;
   state.files = [];
+  state.treFiles = [];
   state.pclFiles = [];
   state.visibleFileCount = 100;
+  state.visibleTreFileCount = 100;
   state.visiblePclFileCount = 100;
   state.fileIssues.clear();
   state.status = "idle";
   clearOutput();
   renderFiles();
   renderPclFiles();
+  renderTreFiles();
   elements.pickFiles.focus();
   elements.dropzone.scrollIntoView({
     behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
